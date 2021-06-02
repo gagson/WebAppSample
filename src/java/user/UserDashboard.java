@@ -5,13 +5,30 @@
  */
 package user;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.sqlite.SQLiteDataSource;
 
 /**
  *
@@ -19,8 +36,8 @@ import javax.servlet.http.HttpSession;
  */
 public class UserDashboard extends HttpServlet {
 
-   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected ArrayList<ArrayList<Object>> processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
@@ -29,28 +46,46 @@ public class UserDashboard extends HttpServlet {
         //session.removeAttribute("userName"); //cannot access to /dashboard directly
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
-                /* TODO output your page here. You may use following sample code. */
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>Dashboard</title>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println("<h1>Welcome " + login + 
-                        "(type:" + type + ")" + "(Your homefolder is " + homeFolder + ")" + " to the dashboard</h1>");
-                out.println("");
-                out.println("<a href=\"./upload\">Files Upload</a>");
-                out.println("<a href=\"./permissions\">Photo Permissions Management</a>");
-                out.println("<a href=\"../logout\">Logout</a>");
-                out.println("</body>");
-                out.println("</html>");
-            } else {
-                response.sendRedirect(request.getContextPath());
+                SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
+                if (dataSource != null) {
+                    try (Connection dbConn = dataSource.getConnection()) {
+                        String selectString = "SELECT file_name FROM photos WHERE user_login=?";
+
+                        try (PreparedStatement selectStatement = dbConn.prepareStatement(selectString)) {
+                            selectStatement.setString(1, login);
+                            ResultSet rs = selectStatement.executeQuery();
+
+                            while (rs.next()) {
+                                String filename = rs.getString(1);
+                                String path = request.getContextPath();
+                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
+                            }
+
+                            out.println("<!DOCTYPE html>");
+                            out.println("<html>");
+                            out.println("<head>");
+                            out.println("<title>Dashboard</title>");
+                            out.println("</head>");
+                            out.println("<body runat=\"server\">");
+                            out.println("<h1>Welcome " + login
+                                    + "(type:" + type + ")" + "(Your homefolder is " + homeFolder + ")" + " to the dashboard</h1>");
+                            
+                            out.println("<a href=\"./upload\">Files Upload</a>");
+                            out.println("<a href=\"./permissions\">Photo Permissions Management</a>");
+                            out.println("<a href=\"../logout\">Logout</a>");
+                            out.println("</body>");
+                            out.println("</html>");
+                        }
+                    }
+                } else {
+                    response.sendRedirect(request.getContextPath());
+                }
             }
         }
+        return null;
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,7 +97,12 @@ public class UserDashboard extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -76,7 +116,11 @@ public class UserDashboard extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
