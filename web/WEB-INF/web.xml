@@ -17,7 +17,7 @@
         <servlet-class>util.Validate</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>photoKeywordsEdit</servlet-name>
+        <servlet-name>EditPhotoKeyword</servlet-name>
         <servlet-class>user.photoKeywordsEdit</servlet-class>
     </servlet>
     <servlet>
@@ -46,8 +46,8 @@
         <multipart-config/>
     </servlet>
     <servlet>
-        <servlet-name>ReceivePermissionServlet</servlet-name>
-        <servlet-class>user.ReceivePermissionServlet</servlet-class>
+        <servlet-name>EditPermission</servlet-name>
+        <servlet-class>user.EditPermission</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
@@ -66,8 +66,8 @@
         <url-pattern>/validate</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>photoKeywordsEdit</servlet-name>
-        <url-pattern>/user/edit</url-pattern>
+        <servlet-name>EditPhotoKeyword</servlet-name>
+        <url-pattern>/user/edit_keyword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>photoPermissions</servlet-name>
@@ -94,8 +94,8 @@
         <url-pattern>/user/receive</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ReceivePermissionServlet</servlet-name>
-        <url-pattern>/user/receive_permission</url-pattern>
+        <servlet-name>EditPermission</servlet-name>
+        <url-pattern>/user/edit_permission</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

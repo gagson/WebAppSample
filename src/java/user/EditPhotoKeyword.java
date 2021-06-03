@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author gagso
  */
-public class photoKeywordsEdit extends HttpServlet {
+public class EditPhotoKeyword extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
