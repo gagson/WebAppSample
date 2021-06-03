@@ -5,9 +5,7 @@
  */
 package user;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,15 +18,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import org.sqlite.SQLiteDataSource;
-import static user.ReceiveFileServlet.readBytesAndClose;
 
 /**
  *
  * @author gagso
  */
-public class EditPermission extends HttpServlet {
+public class ReceiveDashboardForm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,70 +38,48 @@ public class EditPermission extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
         String[] checkedPhotos = request.getParameterValues("checkedMyPhoto");
-        
+
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String selectMyPhotoString = "SELECT file_name, share_to1, share_to2, share_to3 FROM photos WHERE user_login=?";
-
-                        try (PreparedStatement selectStatement = dbConn.prepareStatement(selectMyPhotoString)) {
-//                            String checkedPhoto = checkedPhotos.next();
-//                            selectStatement.setString(1, checkedPhotos);
-                            ResultSet rsMyPhoto = selectStatement.executeQuery();
+                        String insertString = "SELECT keyword1, keyword2, keyword3 FROM photos WHERE filename=?";
+                        try (PreparedStatement selectStatement = dbConn.prepareStatement(insertString)) {
 
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
                             out.println("<head>");
-                            out.println("<title>Photo Repository App</title>"
-                                    + "        <meta charset=\"UTF-8\">\n"
-                                    + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-                                    + "        <!-- Latest compiled and minified CSS -->\n"
-                                    + "        <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">\n"
-                                    + "        <!-- jQuery library -->\n"
-                                    + "        <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>\n"
-                                    + "        <!-- Popper JS -->\n"
-                                    + "        <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js\"></script>\n"
-                                    + "        <!-- Latest compiled JavaScript -->\n"
-                                    + "        <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\"></script>");
+                            out.println("<title>Photo Repository App</title>");
                             out.println("</head>");
                             out.println("<body>");
-                            out.println("<nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
-                                    + "            <h2>Photo Repository App</h2>\n"
-                                    + "        </nav>");
-                            out.println("           <div class=\"h5 text-center\">\n"
-                                    + "                Photo Sharing Permissions Management\n"
-                                    + "            </div>");
-                            while (rsMyPhoto.next()) {
-                                String filename = rsMyPhoto.getString(1);
-                                String share_to1 = rsMyPhoto.getString(2);
-                                String share_to2 = rsMyPhoto.getString(3);
-                                String share_to3 = rsMyPhoto.getString(4);
+                            out.println("<h1>Edit keywords: </h1>");
+                            for (int i = 1; i < checkedPhotos.length + 1; i++) {
+                                selectStatement.setString(i, checkedPhotos[i]);
+                                ResultSet rs = selectStatement.executeQuery();
+                                while (rs.next()) {
+                                    String keyword = rs.getString(1);
+                                    out.println("<p>" + keyword + "</p>");
+                                }
                             }
-                            out.println("");
-                            out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
-                            out.println("<button value=\"Go back to Dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\">"
-                                    + "<a href=\"dashboard\">Go back to Dashboard</a></button></div>");
-                            out.println("<div class=\"row p-1\"></div>");
-                            out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
-                            out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>");
                             out.println("</body>");
                             out.println("</html>");
-                        }
-                    }
 
-                } else {
-                    response.sendRedirect(request.getContextPath());
+                        }
+//                        } else {
+//                            response.sendRedirect("dashboard");
+//                        }
+                    }
                 }
-            } else {
-                response.sendRedirect(request.getContextPath());
             }
+            /* TODO output your page here. You may use following sample code. */
+
         }
     }
 
@@ -124,7 +98,7 @@ public class EditPermission extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(EditPermission.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReceiveDashboardForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -142,7 +116,7 @@ public class EditPermission extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(EditPermission.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReceiveDashboardForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

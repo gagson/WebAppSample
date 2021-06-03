@@ -53,8 +53,8 @@ public class UserDashboard extends HttpServlet {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String selectMyPhotoString = "SELECT image_data FROM photos WHERE user_login=?";
-                        String selectSharedWithMeString = "SELECT image_data, user_login FROM photos "
+                        String selectMyPhotoString = "SELECT image_data, file_name FROM photos WHERE user_login=?";
+                        String selectSharedWithMeString = "SELECT image_data, user_login, file_name FROM photos "
                                 + "WHERE share_to1=? or share_to2=? or share_to3=?;";
 
                         try (PreparedStatement selectMyPhotoStatement = dbConn.prepareStatement(selectMyPhotoString)) {
@@ -107,7 +107,7 @@ public class UserDashboard extends HttpServlet {
                             out.println("<p>My Photos</p>");
                             int i = 1;
                             while (rsMyPhoto.next()) {
-//                                String filename = rsMyPhoto.getString(1);
+                                String filename = rsMyPhoto.getString(2);
 //                                String path = request.getContextPath();
 
                                 //Read the image data from the db, resize the image, and place a base64 string
@@ -122,19 +122,17 @@ public class UserDashboard extends HttpServlet {
                                         + "<label class=\"col-md-1\"></label>");
                                 out.println("<span>\n");
                                 out.println(" <label class=\"form-check-label\">");
-                                out.println(" <input type=\"checkbox\" id=\"check\" name=\"checkedMyPhoto" + i + "\" class=\"form-check-input\" value=\"selection\">" + i
+                                out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedMyPhoto\" class=\"form-check-input\" value=" + filename + ">" + i
                                         + ") </label>\n"
                                         + " </span>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("<img src=\"data:image/png;base64,"+ Base64.getEncoder().encodeToString(bos.toByteArray())+ "\">");//                                
-                                
-                                
-                                
+                               
 //                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
-//                                out.println("Filename: " + filename);
+                                out.println("<p>(" + filename + ")</p>");
                                 out.println("<label class=\"col-sm\"></label>");
-                                out.println("<input type=\"submit\" value=\"Edit\" name=\"edit\" class=\"btn btn-outline-success\"></input>");
-                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<input type=\"submit\" value=\"Edit\" onclick=\"form.action='receive_dashboard_form';\" name=\"edit\" class=\"btn btn-outline-success\"></input>");
+//                                out.println("<label class=\"col-sm\"></label>");
                                 out.println("<input type=\"submit\" value=\"Share\" name=\"share\" class=\"btn btn-outline-info\"></input>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("</div>");//row
@@ -148,6 +146,7 @@ public class UserDashboard extends HttpServlet {
                             int j = 1;
                             while (rsSharedPhoto.next()) {
                                 String shared_from = rsSharedPhoto.getString(2);
+                                String filename = rsSharedPhoto.getString(3);
 //                                String path = request.getContextPath();
                                 BufferedImage image = ImageIO.read(rsSharedPhoto.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
@@ -160,17 +159,17 @@ public class UserDashboard extends HttpServlet {
                                         + "<label class=\"col-md-1\"></label>");
                                 out.println("<span>\n");
                                 out.println(" <label class=\"form-check-label\">\n");
-                                out.println(" <input type=\"checkbox\" id=\"check\" name=\"checkedShare" + j + "\" class=\"form-check-input\" value=\"selection\">" + j
+                                out.println(" <input type=\"checkbox\" id=\"check\" name=\"checkedShare\" class=\"form-check-input\" value=\"selection\">" + j
                                         + ") </label>\n"
                                         + " </span>");
                                 out.println("<label class=\"col-md-1\"></label>");
                                 out.println("<img src=\"data:image/png;base64,"+ Base64.getEncoder().encodeToString(bos.toByteArray())+ "\" width=\"100px\" height=\"auto\">");      
                                 out.println("<label class=\"col-md-1\"></label>");
-                                out.println("<label class=\"col-md\">Shared from: <i>" + shared_from + "</i></label>");
+                                out.println("<label class=\"col-md\">Shared from: <i>" + shared_from + "</i> (" 
+                                        + filename + ")</label>");
                                 
 //                                out.println("<img src=\"" + path + "/imageFolder/" + shared_from + "/" + filename + "\">");
                                 
-                                out.println("<label class=\"col-md-1\"></label>");
                                 out.println("<div class=\"row p-1\"></div>");
                                 out.println("</div>");//row
                                 out.println("<div class=\"row p-1\"></div>");
