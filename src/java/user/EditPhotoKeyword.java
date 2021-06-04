@@ -105,49 +105,52 @@ public class EditPhotoKeyword extends HttpServlet {
                                 String keyword1 = rsKeywords.getString(1);
                                 String keyword2 = rsKeywords.getString(2);
                                 String keyword3 = rsKeywords.getString(3);
-                            
-                            out.println("            <form action=\"receive_edit_keyword\" method=\"post\" enctype=\"multipart/form-data\">\n"
-                                    + "                <div class=\"row p-1\"></div>\n"
-                                    + "                <div class=\"row\" id=\"newRow\">\n"
-                                    + "                    <label class=\"col-md-4\"></label>\n"
-                                    + "                    <label class=\"col-md-1\">Keyword:</label>\n"
-                                    + "                    <div class=\"col-md-3\">\n"
-                                    + "                        <input type=\"text\" name=\"keyword1\" class=\"form-control\" value=\"" + keyword1 + "\">"
-                                    + "                    </div>\n"
-                                    + "                </div>"//row
-                                    + "                <div class=\"row p-1\"></div>\n"
-                                    + "                <div class=\"row\" id=\"newRow\">\n"
-                                    + "                    <label class=\"col-md-4\"></label>\n"
-                                    + "                    <label class=\"col-md-1\">Keyword:</label>\n"
-                                    + "                    <div class=\"col-md-3\">\n"
-                                    + "                        <input type=\"text\" name=\"keyword2\" class=\"form-control\" value=\"" + keyword2 +"\">"
-                                    + "                    </div>\n"
-                                    + "                </div>"//row
-                                    + "                <div class=\"row p-1\"></div>\n"
-                                    + "                <div class=\"row\" id=\"newRow\">\n"
-                                    + "                    <label class=\"col-md-4\"></label>\n"
-                                    + "                    <label class=\"col-md-1\">Keyword:</label>\n"
-                                    + "                    <div class=\"col-md-3\">\n"
-                                    + "                        <input type=\"text\" name=\"keyword3\" class=\"form-control\" value=\"" + keyword3 + "\">"
-                                    + "                    </div>\n"
-                                    + "                </div>"//row
-                                    + "                    <label class=\"col-md-2\"></label>\n"
-                                    + "                </div>\n"
-                                    + "                <div class=\"row p-1\"></div>\n"
-                                    + "                <div class=\"row\" id=\"newRow\">\n"
-                                    + "                    <label class=\"col-md-4\"></label>\n"
-                                    + "                <div class=\"col-md-4\">\n"
-                                    + "                      <img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">"
-                                    + "                </div>\n"
-                                    + "                </div>\n"
-                                    + "                <hr>");
-                            out.println("<div class=\"row\">\n"
-                                    + "                    <label class=\"col-md-3\"></label>\n"
-                                    + "                    <button type=\"submit\" value=\""+ editPhoto +"\" name=\"edit\" class=\"col-md-6 btn btn-primary btn-block\">Submit</button>\n"
-                                    + "                    <label class=\"col-md-3\"></label>\n"
-                                    + "                </div>\n"
-                                    + "            </form>");
+
+                                out.println("            <form action=\"receive_edit_keyword\" method=\"post\" enctype=\"multipart/form-data\">\n"
+                                        + "                <div class=\"row p-1\"></div>\n"
+                                        + "                <div class=\"row\" id=\"newRow\">\n"
+                                        + "                    <label class=\"col-md-4\"></label>\n"
+                                        + "                    <label class=\"col-md-1\">Keyword:</label>\n"
+                                        + "                    <div class=\"col-md-3\">\n"
+                                        + "                        <input type=\"text\" name=\"keyword1\" class=\"form-control\" value=\"" + keyword1 + "\">"
+                                        + "                    </div>\n"
+                                        + "                </div>"//row
+                                        + "                <div class=\"row p-1\"></div>\n"
+                                        + "                <div class=\"row\" id=\"newRow\">\n"
+                                        + "                    <label class=\"col-md-4\"></label>\n"
+                                        + "                    <label class=\"col-md-1\">Keyword:</label>\n"
+                                        + "                    <div class=\"col-md-3\">\n"
+                                        + "                        <input type=\"text\" name=\"keyword2\" class=\"form-control\" value=\"" + keyword2 + "\">"
+                                        + "                    </div>\n"
+                                        + "                </div>"//row
+                                        + "                <div class=\"row p-1\"></div>\n"
+                                        + "                <div class=\"row\" id=\"newRow\">\n"
+                                        + "                    <label class=\"col-md-4\"></label>\n"
+                                        + "                    <label class=\"col-md-1\">Keyword:</label>\n"
+                                        + "                    <div class=\"col-md-3\">\n"
+                                        + "                        <input type=\"text\" name=\"keyword3\" class=\"form-control\" value=\"" + keyword3 + "\">"
+                                        + "                    </div>\n"
+                                        + "                </div>"//row
+                                        + "                    <label class=\"col-md-2\"></label>\n"
+                                        + "                </div>\n"
+                                        + "                <div class=\"row p-1\"></div>\n"
+                                        + "                <div class=\"row\" id=\"newRow\">\n"
+                                        + "                    <label class=\"col-md-4\"></label>\n"
+                                        + "                <div class=\"col-md-4\">\n"
+                                        + "                      <img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">"
+                                        + "                </div>\n"
+                                        + "                </div>\n"
+                                        + "                <hr>");
+                                out.println("<div class=\"row\">\n"
+                                        + "                    <label class=\"col-md-3\"></label>\n"
+                                        + "                    <button type=\"submit\" value=\"" + editPhoto + "\" name=\"edit\" class=\"col-md-6 btn btn-primary btn-block\">Submit</button>\n"
+                                        + "                    <label class=\"col-md-3\"></label>\n"
+                                        + "                </div>\n"
+                                        + "            </form>");
                             }
+                            out.println("<div class=\"row p-1\"></div>");
+                            out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                            out.println("<button value=\"dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"dashboard\">Go back to dashboard</a></div>");
                             out.println("<div class=\"row p-1\"></div>");
                             out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
                             out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>");

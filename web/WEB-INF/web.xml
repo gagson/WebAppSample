@@ -22,24 +22,24 @@
         <multipart-config/>
     </servlet>
     <servlet>
-        <servlet-name>photoPermissions</servlet-name>
-        <servlet-class>user.photoPermissions</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>photoSearch</servlet-name>
         <servlet-class>util.photoSearch</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet>
         <servlet-name>photoSearchResults</servlet-name>
         <servlet-class>util.photoSearchResults</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet>
         <servlet-name>readRequests</servlet-name>
         <servlet-class>user.readRequests</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>util.LogoutServlet</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet>
         <servlet-name>ReceiveFileServlet</servlet-name>
@@ -54,10 +54,17 @@
     <servlet>
         <servlet-name>ReceiveDashboardForm</servlet-name>
         <servlet-class>user.ReceiveDashboardForm</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet>
         <servlet-name>ReceiveEditKeyword</servlet-name>
         <servlet-class>user.ReceiveEditKeyword</servlet-class>
+        <multipart-config/>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceiveEditPermission</servlet-name>
+        <servlet-class>user.ReceiveEditPermission</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
@@ -77,12 +84,8 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditPhotoKeyword</servlet-name>
-        <url-pattern>/user/edit_keyword</url-pattern>
+        <url-pattern>/user/edit</url-pattern>
         <multipart-config/>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>photoPermissions</servlet-name>
-        <url-pattern>/user/permissions</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>photoSearch</servlet-name>
@@ -106,7 +109,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditPermission</servlet-name>
-        <url-pattern>/user/edit_permission</url-pattern>
+        <url-pattern>/user/permissions</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReceiveDashboardForm</servlet-name>
@@ -115,6 +118,10 @@
     <servlet-mapping>
         <servlet-name>ReceiveEditKeyword</servlet-name>
         <url-pattern>/user/receive_edit_keyword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveEditPermission</servlet-name>
+        <url-pattern>/user/receive_edit_permission</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -100,7 +100,7 @@ public class UserDashboard extends HttpServlet {
                                     + "</b></center></h4></div>");
                             out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
                             out.println("<hr>");//how to separate it
-                            out.println(" <form action=\"edit_permission\" method=\"post\" enctype=\"multipart/form-data\">");
+                            out.println(" <form action=\"upload\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
@@ -126,14 +126,14 @@ public class UserDashboard extends HttpServlet {
                                         + ") </label>\n"
                                         + " </span>");
                                 out.println("<label class=\"col-sm\"></label>");
-                                out.println("<img src=\"data:image/png;base64,"+ Base64.getEncoder().encodeToString(bos.toByteArray())+ "\">");// image                               
-                               
+                                out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
+
 //                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
                                 out.println("<p>(" + filename + ")</p>");
                                 out.println("<label class=\"col-sm\"></label>");
-                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit_keyword';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
 //                                out.println("<label class=\"col-sm\"></label>");
-                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit_permission';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='permissions';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("</div>");//row
                                 out.println("<div class=\"row p-1\"></div>");
@@ -163,13 +163,12 @@ public class UserDashboard extends HttpServlet {
                                         + ") </label>\n"
                                         + " </span>");
                                 out.println("<label class=\"col-md-1\"></label>");
-                                out.println("<img src=\"data:image/png;base64,"+ Base64.getEncoder().encodeToString(bos.toByteArray())+ "\" width=\"100px\" height=\"auto\">");      
+                                out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\" width=\"100px\" height=\"auto\">");
                                 out.println("<label class=\"col-md-1\"></label>");
-                                out.println("<label class=\"col-md\">Shared from: <i>" + shared_from + "</i> (" 
+                                out.println("<label class=\"col-md-1\">Shared from: <i>" + shared_from + "</i> ("
                                         + filename + ")</label>");
-                                
+
 //                                out.println("<img src=\"" + path + "/imageFolder/" + shared_from + "/" + filename + "\">");
-                                
                                 out.println("<div class=\"row p-1\"></div>");
                                 out.println("</div>");//row
                                 out.println("<div class=\"row p-1\"></div>");
@@ -186,11 +185,10 @@ public class UserDashboard extends HttpServlet {
                                     + "<input type=\"submit\" value=\"Delete Selected Image\" name=\"action\" class=\"col-md-2 btn btn-danger btn-block\">\n"
                                     + "<label class=\"col-md-1\"></label>");
                             out.println("</form>"
-                                    + "<button value=\"Upload New Image\" name=\"upload\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./upload\">Upload New Image</a></button>\n"
-                                    + "<label class=\"col-md-2\"></label>\n"
                                     + " </div>");
-                            out.println("<div class=\"row p-1\"></div>");
-                            
+                            out.println("<div class=\"row p-1\"></div>"
+                                    + "<div class=\"row\"><label class=\"col-md-8\"></label>"
+                                    + "<button value=\"Upload New Image\" name=\"upload\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./upload\">Upload New Image</a></button></div>");
                             out.println("<div class=\"row p-1\"></div>");
                             out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
                             out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>");

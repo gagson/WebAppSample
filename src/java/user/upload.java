@@ -105,8 +105,14 @@ public class upload extends HttpServlet {
                         + "                    <input type=\"submit\" value=\"Submit\" class=\"col-md-6 btn btn-primary btn-block\">\n"
                         + "                    <label class=\"col-md-3\"></label>\n"
                         + "                </div>\n"
-                        + "            </form>\n"
-                        + "<script>\n"
+                        + "            </form>\n");
+                out.println("<div class=\"row p-1\"></div>");
+                out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                out.println("<button value=\"dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"dashboard\">Go back to dashboard</a></div>");
+                out.println("<div class=\"row p-1\"></div>");
+                out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>");
+                out.println("<script>\n"
                         + "function preview() {\n"
                         + "                    frame.src = URL.createObjectURL(event.target.files[0]);\n"
                         + "                }\n"
