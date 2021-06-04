@@ -18,7 +18,8 @@
     </servlet>
     <servlet>
         <servlet-name>EditPhotoKeyword</servlet-name>
-        <servlet-class>user.photoKeywordsEdit</servlet-class>
+        <servlet-class>user.EditPhotoKeyword</servlet-class>
+        <multipart-config/>
     </servlet>
     <servlet>
         <servlet-name>photoPermissions</servlet-name>
@@ -48,6 +49,15 @@
     <servlet>
         <servlet-name>EditPermission</servlet-name>
         <servlet-class>user.EditPermission</servlet-class>
+        <multipart-config/>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceiveDashboardForm</servlet-name>
+        <servlet-class>user.ReceiveDashboardForm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceiveEditKeyword</servlet-name>
+        <servlet-class>user.ReceiveEditKeyword</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
@@ -68,6 +78,7 @@
     <servlet-mapping>
         <servlet-name>EditPhotoKeyword</servlet-name>
         <url-pattern>/user/edit_keyword</url-pattern>
+        <multipart-config/>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>photoPermissions</servlet-name>
@@ -96,6 +107,14 @@
     <servlet-mapping>
         <servlet-name>EditPermission</servlet-name>
         <url-pattern>/user/edit_permission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveDashboardForm</servlet-name>
+        <url-pattern>/user/receive_dashboard_form</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveEditKeyword</servlet-name>
+        <url-pattern>/user/receive_edit_keyword</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

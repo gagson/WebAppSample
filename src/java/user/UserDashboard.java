@@ -126,14 +126,14 @@ public class UserDashboard extends HttpServlet {
                                         + ") </label>\n"
                                         + " </span>");
                                 out.println("<label class=\"col-sm\"></label>");
-                                out.println("<img src=\"data:image/png;base64,"+ Base64.getEncoder().encodeToString(bos.toByteArray())+ "\">");//                                
+                                out.println("<img src=\"data:image/png;base64,"+ Base64.getEncoder().encodeToString(bos.toByteArray())+ "\">");// image                               
                                
 //                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
                                 out.println("<p>(" + filename + ")</p>");
                                 out.println("<label class=\"col-sm\"></label>");
-                                out.println("<input type=\"submit\" value=\"Edit\" onclick=\"form.action='receive_dashboard_form';\" name=\"edit\" class=\"btn btn-outline-success\"></input>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit_keyword';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
 //                                out.println("<label class=\"col-sm\"></label>");
-                                out.println("<input type=\"submit\" value=\"Share\" name=\"share\" class=\"btn btn-outline-info\"></input>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit_permission';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("</div>");//row
                                 out.println("<div class=\"row p-1\"></div>");

@@ -46,18 +46,18 @@ public class EditPermission extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        String[] checkedPhotos = request.getParameterValues("checkedMyPhoto");
+        String clickedPhoto = request.getParameter("share");
         
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String selectMyPhotoString = "SELECT file_name, share_to1, share_to2, share_to3 FROM photos WHERE user_login=?";
+                        String selectMyPhotoString = "SELECT share_to1, share_to2, share_to3 FROM photos WHERE file_name=?";
 
                         try (PreparedStatement selectStatement = dbConn.prepareStatement(selectMyPhotoString)) {
 //                            String checkedPhoto = checkedPhotos.next();
-//                            selectStatement.setString(1, checkedPhotos);
+                            selectStatement.setString(1, clickedPhoto);
                             ResultSet rsMyPhoto = selectStatement.executeQuery();
 
                             out.println("<!DOCTYPE html>");
@@ -82,13 +82,10 @@ public class EditPermission extends HttpServlet {
                             out.println("           <div class=\"h5 text-center\">\n"
                                     + "                Photo Sharing Permissions Management\n"
                                     + "            </div>");
-                            while (rsMyPhoto.next()) {
-                                String filename = rsMyPhoto.getString(1);
-                                String share_to1 = rsMyPhoto.getString(2);
-                                String share_to2 = rsMyPhoto.getString(3);
-                                String share_to3 = rsMyPhoto.getString(4);
-                            }
-                            out.println("");
+//                            while (rsMyPhoto.next()) {
+//                                String filename = rsMyPhoto.getString(1);
+//                            }
+                            out.println("<p>"+clickedPhoto+"</p>");
                             out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
                             out.println("<button value=\"Go back to Dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\">"
                                     + "<a href=\"dashboard\">Go back to Dashboard</a></button></div>");
