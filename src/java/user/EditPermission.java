@@ -86,7 +86,7 @@ public class EditPermission extends HttpServlet {
                                     + "    </head>\n"
                                     + "<style>"
                                     + "img {\n"
-                                    + "  width: 200px;\n"
+                                    + "  width: 400px;\n"
                                     + "  height: auto;\n"
                                     + "}</style>"
                                     + "    <body>\n"
@@ -116,6 +116,14 @@ public class EditPermission extends HttpServlet {
                                 String share_to3 = rsShare_to.getString(3);
 
                                 out.println("            <form action=\"receive_edit_permission\" method=\"post\" enctype=\"multipart/form-data\">\n"
+                                        + "                <div class=\"row p-1\"></div>\n"
+                                        + "                <div class=\"row\" id=\"newRow\">\n"
+                                        + "                    <label class=\"col-md-4\"></label>\n"
+                                        + "                    <label class=\"col-md-1\"></label>\n"
+                                        + "                    <div class=\"col-md-3\">\n"
+                                        + "                        <input type=\"checkbox\" name=\"share_to_public\" class=\"form-check-input\" value=\"share_to_public\">Share to Public"
+                                        + "                    </div>\n"
+                                        + "                </div>"//row
                                         + "                <div class=\"row p-1\"></div>\n"
                                         + "                <div class=\"row\" id=\"newRow\">\n"
                                         + "                    <label class=\"col-md-4\"></label>\n"

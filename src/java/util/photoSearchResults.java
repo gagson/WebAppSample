@@ -78,31 +78,40 @@ public class photoSearchResults extends HttpServlet {
                             ResultSet rsMyPhoto1 = selectMyPhotoStatement1.executeQuery();//user's photo
                             PreparedStatement selectMyPhotoStatement2 = dbConn.prepareStatement(selectMyPhotoString2);
                             selectMyPhotoStatement2.setString(1, keyword2);
-                            selectMyPhotoStatement1.setString(2, keyword2);
-                            selectMyPhotoStatement1.setString(3, keyword2);
-                            selectMyPhotoStatement1.setString(4, login);
+                            selectMyPhotoStatement2.setString(2, keyword2);
+                            selectMyPhotoStatement2.setString(3, keyword2);
+                            selectMyPhotoStatement2.setString(4, login);
                             ResultSet rsMyPhoto2 = selectMyPhotoStatement2.executeQuery();
                             PreparedStatement selectMyPhotoStatement3 = dbConn.prepareStatement(selectMyPhotoString3);
                             selectMyPhotoStatement3.setString(1, keyword3);
-                            selectMyPhotoStatement1.setString(2, keyword3);
-                            selectMyPhotoStatement1.setString(3, keyword3);
-                            selectMyPhotoStatement1.setString(4, login);
+                            selectMyPhotoStatement3.setString(2, keyword3);
+                            selectMyPhotoStatement3.setString(3, keyword3);
+                            selectMyPhotoStatement3.setString(4, login);
                             ResultSet rsMyPhoto3 = selectMyPhotoStatement3.executeQuery();
                             
                             PreparedStatement selectSharedWithMeStatement1 = dbConn.prepareStatement(selectSharedWithMeString1);
                             selectSharedWithMeStatement1.setString(1, login);
                             selectSharedWithMeStatement1.setString(2, login);
                             selectSharedWithMeStatement1.setString(3, login);
+                            selectSharedWithMeStatement1.setString(4, keyword1);
+                            selectSharedWithMeStatement1.setString(5, keyword1);
+                            selectSharedWithMeStatement1.setString(6, keyword1);
                             ResultSet rsSharedPhoto1 = selectSharedWithMeStatement1.executeQuery();//photo shared to user
                             PreparedStatement selectSharedWithMeStatement2 = dbConn.prepareStatement(selectSharedWithMeString2);
                             selectSharedWithMeStatement2.setString(1, login);
                             selectSharedWithMeStatement2.setString(2, login);
                             selectSharedWithMeStatement2.setString(3, login);
+                            selectSharedWithMeStatement2.setString(4, keyword2);
+                            selectSharedWithMeStatement2.setString(5, keyword2);
+                            selectSharedWithMeStatement2.setString(6, keyword2);
                             ResultSet rsSharedPhoto2 = selectSharedWithMeStatement2.executeQuery();
                             PreparedStatement selectSharedWithMeStatement3 = dbConn.prepareStatement(selectSharedWithMeString3);
                             selectSharedWithMeStatement3.setString(1, login);
                             selectSharedWithMeStatement3.setString(2, login);
                             selectSharedWithMeStatement3.setString(3, login);
+                            selectSharedWithMeStatement3.setString(4, keyword3);
+                            selectSharedWithMeStatement3.setString(5, keyword3);
+                            selectSharedWithMeStatement3.setString(6, keyword3);
                             ResultSet rsSharedPhoto3 = selectSharedWithMeStatement3.executeQuery();
 
                             out.println("<!DOCTYPE html>");
@@ -141,7 +150,7 @@ public class photoSearchResults extends HttpServlet {
                             out.println("<div class=\"row\">");
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
-                            out.println("<p>Photos Owned by Me</p>");
+                            out.println("<p>Photos Owned by You</p>");
                             int i = 1;
                             while (rsMyPhoto1.next()) {
                                 String filename = rsMyPhoto1.getString(2);
@@ -181,7 +190,7 @@ public class photoSearchResults extends HttpServlet {
 //                                String path = request.getContextPath();
 
                                 //Read the image data from the db, resize the image, and place a base64 string
-                                BufferedImage image = ImageIO.read(rsMyPhoto1.getBinaryStream(1));
+                                BufferedImage image = ImageIO.read(rsMyPhoto2.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
                                 Graphics2D graphics2D = resizedImage.createGraphics();
                                 graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
@@ -214,7 +223,7 @@ public class photoSearchResults extends HttpServlet {
 //                                String path = request.getContextPath();
 
                                 //Read the image data from the db, resize the image, and place a base64 string
-                                BufferedImage image = ImageIO.read(rsMyPhoto1.getBinaryStream(1));
+                                BufferedImage image = ImageIO.read(rsMyPhoto3.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
                                 Graphics2D graphics2D = resizedImage.createGraphics();
                                 graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
@@ -242,10 +251,10 @@ public class photoSearchResults extends HttpServlet {
                                 out.println("<div class=\"row p-1\"></div>");
                                 i++;
                             }
-                            out.println("</div>");
+                            out.println("</div>");//Shared part
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
-                            out.println("<p>Photos Shared with Me</p>");
+                            out.println("<p>Photos Shared with You</p>");
                             int j = 1;
                             while (rsSharedPhoto1.next()) {
                                 String shared_from = rsSharedPhoto1.getString(2);

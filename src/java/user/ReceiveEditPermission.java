@@ -47,6 +47,7 @@ public class ReceiveEditPermission extends HttpServlet {
         String share_to2 = request.getParameter("share_to2");
         String share_to3 = request.getParameter("share_to3");
         String editPhoto = request.getParameter("permission");
+        String[] share_to_public = request.getParameterValues("share_to_public");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -73,6 +74,12 @@ public class ReceiveEditPermission extends HttpServlet {
                                 updateStatement.setString(3, share_to3);
                                 updateStatement.setString(4, editPhoto);
                                 updateStatement.executeUpdate();
+                                if (share_to_public != null) {
+                                    String updatePublic = "UPDATE photos SET share_to_public='public' WHERE file_name=?";
+                                    PreparedStatement updatePublicStatement = dbConn.prepareStatement(updatePublic);
+                                    updatePublicStatement.setString(1, editPhoto);
+                                    updatePublicStatement.executeUpdate();
+                                }
                             } else {
                                 out.println("<!DOCTYPE html>");
                                 out.println("<html>");
