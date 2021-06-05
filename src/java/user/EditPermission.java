@@ -60,6 +60,7 @@ public class EditPermission extends HttpServlet {
                     try (Connection dbConn = dataSource.getConnection()) {
                         String selectMyPhotoString = "SELECT image_data FROM photos WHERE file_name=?";
                         String selectShare_toString = "SELECT share_to1, share_to2, share_to3 FROM photos WHERE file_name=?";
+                        String selectPublicString = "SELECT share_to_public FROM photos WHERE file_name=?";
 
                         try (PreparedStatement selectMyPhotoStatement = dbConn.prepareStatement(selectMyPhotoString)) {
                             PreparedStatement selectKeywordStatement = dbConn.prepareStatement(selectShare_toString);
@@ -68,6 +69,10 @@ public class EditPermission extends HttpServlet {
                             selectKeywordStatement.setString(1, clickedPhoto);
                             ResultSet rsMyPhoto = selectMyPhotoStatement.executeQuery();
                             ResultSet rsShare_to = selectKeywordStatement.executeQuery();
+
+                            PreparedStatement selectPublicStatement = dbConn.prepareStatement(selectPublicString);
+                            selectPublicStatement.setString(1, clickedPhoto);
+                            ResultSet rsPublic = selectPublicStatement.executeQuery();
 
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
@@ -120,34 +125,58 @@ public class EditPermission extends HttpServlet {
                                         + "                <div class=\"row\" id=\"newRow\">\n"
                                         + "                    <label class=\"col-md-4\"></label>\n"
                                         + "                    <label class=\"col-md-1\"></label>\n"
-                                        + "                    <div class=\"col-md-3\">\n"
-                                        + "                        <input type=\"checkbox\" name=\"share_to_public\" class=\"form-check-input\" value=\"share_to_public\">Share to Public"
-                                        + "                    </div>\n"
+                                        + "                    <div class=\"col-md-3\">\n");
+                                if (rsPublic.getString(1) != null) {
+                                    out.println("<input type=\"checkbox\" name=\"share_to_public\" class=\"form-check-input\" value=\"share_to_public\" readonly checked>Share to Public");
+
+                                } else {
+                                    out.println("<input type=\"checkbox\" name=\"share_to_public\" class=\"form-check-input\" value=\"share_to_public\">Share to Public");
+                                }
+
+                                out.println("                    </div>\n"
                                         + "                </div>"//row
                                         + "                <div class=\"row p-1\"></div>\n"
                                         + "                <div class=\"row\" id=\"newRow\">\n"
                                         + "                    <label class=\"col-md-4\"></label>\n"
-                                        + "                    <label class=\"col-md-1\">Share to:</label>\n"
-                                        + "                    <div class=\"col-md-3\">\n"
-                                        + "                        <input type=\"text\" name=\"share_to1\" class=\"form-control\" value=\"" + share_to1 + "\">"
-                                        + "                    </div>\n"
-                                        + "                </div>"//row
+                                        + "                    <label class=\"col-md-1\">Share to:</label>\n");
+                                if (share_to1 != null) {
+                                    out.println("                    <div class=\"col-md-3\">\n"
+                                            + "                        <input type=\"text\" name=\"share_to1\" class=\"form-control\" value=\"" + share_to1 + "\">"
+                                            + "                    </div>\n");
+                                } else {
+                                    out.println("                    <div class=\"col-md-3\">\n"
+                                            + "                        <input type=\"text\" name=\"share_to1\" class=\"form-control\" value=\"\">"
+                                            + "                    </div>\n");
+                                }
+                                out.println("                </div>"//row
                                         + "                <div class=\"row p-1\"></div>\n"
                                         + "                <div class=\"row\" id=\"newRow\">\n"
                                         + "                    <label class=\"col-md-4\"></label>\n"
-                                        + "                    <label class=\"col-md-1\">Share to:</label>\n"
-                                        + "                    <div class=\"col-md-3\">\n"
-                                        + "                        <input type=\"text\" name=\"share_to2\" class=\"form-control\" value=\"" + share_to2 + "\">"
-                                        + "                    </div>\n"
-                                        + "                </div>"//row
+                                        + "                    <label class=\"col-md-1\">Share to:</label>\n");
+                                if (share_to2 != null) {
+                                    out.println("                    <div class=\"col-md-3\">\n"
+                                            + "                        <input type=\"text\" name=\"share_to2\" class=\"form-control\" value=\"" + share_to2 + "\">"
+                                            + "                    </div>\n");
+                                } else {
+                                    out.println("                    <div class=\"col-md-3\">\n"
+                                            + "                        <input type=\"text\" name=\"share_to2\" class=\"form-control\" value=\"\">"
+                                            + "                    </div>\n");
+                                }
+                                out.println("                </div>"//row
                                         + "                <div class=\"row p-1\"></div>\n"
                                         + "                <div class=\"row\" id=\"newRow\">\n"
                                         + "                    <label class=\"col-md-4\"></label>\n"
-                                        + "                    <label class=\"col-md-1\">Share to:</label>\n"
-                                        + "                    <div class=\"col-md-3\">\n"
-                                        + "                        <input type=\"text\" name=\"share_to3\" class=\"form-control\" value=\"" + share_to3 + "\">"
-                                        + "                    </div>\n"
-                                        + "                </div>"//row
+                                        + "                    <label class=\"col-md-1\">Share to:</label>\n");
+                                if (share_to3 != null) {
+                                    out.println("                    <div class=\"col-md-3\">\n"
+                                            + "                        <input type=\"text\" name=\"share_to3\" class=\"form-control\" value=\"" + share_to3 + "\">"
+                                            + "                    </div>\n");
+                                } else {
+                                    out.println("                    <div class=\"col-md-3\">\n"
+                                            + "                        <input type=\"text\" name=\"share_to3\" class=\"form-control\" value=\"\">"
+                                            + "                    </div>\n");
+                                }
+                                out.println("                </div>"//row
                                         + "                    <label class=\"col-md-2\"></label>\n"
                                         + "                </div>\n"
                                         + "                <div class=\"row p-1\"></div>\n"

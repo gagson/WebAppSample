@@ -55,56 +55,78 @@ public class ReceiveEditPermission extends HttpServlet {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String updateString = "UPDATE photos SET share_to1=?, share_to2=?, share_to3=?  WHERE file_name=?";
+                        String updateString1 = "UPDATE photos SET share_to1=?  WHERE file_name=?";
+                        String updateString2 = "UPDATE photos SET share_to2=?  WHERE file_name=?";
+                        String updateString3 = "UPDATE photos SET share_to3=?  WHERE file_name=?";
+                        String updateString1null = "UPDATE photos SET share_to1=null  WHERE file_name=?";
+                        String updateString2null = "UPDATE photos SET share_to2=null  WHERE file_name=?";
+                        String updateString3null = "UPDATE photos SET share_to3=null  WHERE file_name=?";
                         String selectAllUsers = "SELECT login FROM credential";
-                        try (PreparedStatement updateStatement = dbConn.prepareStatement(updateString)) {
+                        try (PreparedStatement updateStatement1 = dbConn.prepareStatement(updateString1)) {
                             PreparedStatement selectAllUsersStatement = dbConn.prepareStatement(selectAllUsers);
                             ResultSet rsAllUsers = selectAllUsersStatement.executeQuery();
-                            if ((rsAllUsers.getString(1) == null ? share_to1 == null : rsAllUsers.getString(1).equals(share_to1))
-                                    || (rsAllUsers.getString(1) == null ? share_to2 == null : rsAllUsers.getString(1).equals(share_to2))
-                                    || (rsAllUsers.getString(1) == null ? share_to3 == null : rsAllUsers.getString(1).equals(share_to3))
-                                    || (rsAllUsers.getString(2) == null ? share_to1 == null : rsAllUsers.getString(2).equals(share_to1))
-                                    || (rsAllUsers.getString(2) == null ? share_to2 == null : rsAllUsers.getString(2).equals(share_to2))
-                                    || (rsAllUsers.getString(2) == null ? share_to3 == null : rsAllUsers.getString(2).equals(share_to3))
-                                    || (rsAllUsers.getString(3) == null ? share_to1 == null : rsAllUsers.getString(3).equals(share_to1))
-                                    || (rsAllUsers.getString(3) == null ? share_to2 == null : rsAllUsers.getString(3).equals(share_to2))
-                                    || (rsAllUsers.getString(3) == null ? share_to3 == null : rsAllUsers.getString(3).equals(share_to3))) {
-                                updateStatement.setString(1, share_to1);
-                                updateStatement.setString(2, share_to2);
-                                updateStatement.setString(3, share_to3);
-                                updateStatement.setString(4, editPhoto);
-                                updateStatement.executeUpdate();
-                                if (share_to_public != null) {
-                                    String updatePublic = "UPDATE photos SET share_to_public='public' WHERE file_name=?";
-                                    PreparedStatement updatePublicStatement = dbConn.prepareStatement(updatePublic);
-                                    updatePublicStatement.setString(1, editPhoto);
-                                    updatePublicStatement.executeUpdate();
+                            PreparedStatement updateStatement2 = dbConn.prepareStatement(updateString2);
+                            PreparedStatement updateStatement3 = dbConn.prepareStatement(updateString3);
+                            PreparedStatement updateStatement1null = dbConn.prepareStatement(updateString1null);
+                            PreparedStatement updateStatement2null = dbConn.prepareStatement(updateString2null);
+                            PreparedStatement updateStatement3null = dbConn.prepareStatement(updateString3null);
+                            while (rsAllUsers.next()) {//not null
+                                if (share_to1 != null) {
+                                    if (rsAllUsers.getString(1).equals(share_to1) && rsAllUsers.getString(1) != null) {
+                                        updateStatement1.setString(1, share_to1);
+                                        updateStatement1.setString(2, editPhoto);
+                                        updateStatement1.executeUpdate();
+                                    }
+                                } else {
+                                    updateStatement1null.setString(1, editPhoto);
+                                    updateStatement1null.executeUpdate();
                                 }
-                            } else {
-                                out.println("<!DOCTYPE html>");
-                                out.println("<html>");
-                                out.println("<head>");
-                                out.println("<title>File Storage</title>");
-                                out.println("</head>");
-                                out.println("<body>");
-                                out.println("<h1>Something wrong!!</h1>");
-                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-                                out.println("</body>");
-                                out.println("</html>");
+                                if (share_to2 != null) {
+                                    if (rsAllUsers.getString(1).equals(share_to2) && rsAllUsers.getString(1) != null) {
+                                        updateStatement2.setString(1, share_to2);
+                                        updateStatement2.setString(2, editPhoto);
+                                        updateStatement2.executeUpdate();
+                                    }
+                                } else {
+                                    updateStatement2null.setString(1, editPhoto);
+                                    updateStatement2null.executeUpdate();
+                                }
+                                if (share_to3 != null) {
+                                    if (rsAllUsers.getString(1).equals(share_to3) && rsAllUsers.getString(1) != null) {
+                                        updateStatement3.setString(1, share_to3);
+                                        updateStatement3.setString(2, editPhoto);
+                                        updateStatement3.executeUpdate();
+                                    }
+                                } else {
+                                    updateStatement3null.setString(1, editPhoto);
+                                    updateStatement3null.executeUpdate();
+                                }
                             }
                         }
-                        out.println("<!DOCTYPE html>");
-                        out.println("<html>");
-                        out.println("<head>");
-                        out.println("<title>File Storage</title>");
-                        out.println("</head>");
-                        out.println("<body>");
-                        out.println("<h1>Success!!</h1>");
-                        out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-                        out.println("</body>");
-                        out.println("</html>");
+                        if (share_to_public != null) {
+                            String updatePublic = "UPDATE photos SET share_to_public='public' WHERE file_name=?";
+                            PreparedStatement updatePublicStatement = dbConn.prepareStatement(updatePublic);
+                            updatePublicStatement.setString(1, editPhoto);
+                            updatePublicStatement.executeUpdate();
+                        } else {
+                            String delPublic = "UPDATE photos SET share_to_public=null WHERE file_name=?";
+                            PreparedStatement delPublicStatement = dbConn.prepareStatement(delPublic);
+                            delPublicStatement.setString(1, editPhoto);
+                            delPublicStatement.executeUpdate();
+                        }
 
                     }
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>File Storage</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Success!!</h1>");
+                    out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                    out.println("</body>");
+                    out.println("</html>");
+
                 } else {
                     response.sendRedirect(request.getContextPath());
                 }
@@ -113,7 +135,7 @@ public class ReceiveEditPermission extends HttpServlet {
             }
         }
     }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -143,7 +165,8 @@ public class ReceiveEditPermission extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ReceiveEditKeyword.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReceiveEditKeyword.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
