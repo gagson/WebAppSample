@@ -67,6 +67,78 @@ public class photoSearch extends HttpServlet {
                         + "                    <label class=\"col-md-4\"></label>\n"
                         + "                    <label class=\"col-md-2\">Keyword 1:</label>\n"
                         + "                    <div class=\"col-md-3\">\n"
+                        + "                        <input type=\"text\" name=\"keyword1\" class=\"form-control\">\n"
+                        + "                    </div>\n"
+                        + "                    <label class=\"col-md-2\"></label>\n"
+                        + "                </div>\n"
+                        + "				<div class=\"row\" id=\"newRow2\">\n"
+                        + "                    <label class=\"col-md-4\"></label>\n"
+                        + "                    <label class=\"col-md-2\">Keyword 2:</label>\n"
+                        + "                    <div class=\"col-md-3\">\n"
+                        + "                        <input type=\"text\" name=\"keyword2\" class=\"form-control\">\n"
+                        + "                    </div>\n"
+                        + "                    <label class=\"col-md-2\"></label>\n"
+                        + "                </div>\n"
+                        + "				<div class=\"row\" id=\"newRow3\">\n"
+                        + "                    <label class=\"col-md-4\"></label>\n"
+                        + "                    <label class=\"col-md-2\">Keyword 3:</label>\n"
+                        + "                    <div class=\"col-md-3\">\n"
+                        + "                        <input type=\"text\" name=\"keyword3\" class=\"form-control\">\n"
+                        + "                    </div>\n"
+                        + "                    <label class=\"col-md-2\"></label>\n"
+                        + "                </div>\n"
+                        + "                <div class=\"row p-1\"></div>\n"
+                        + "                <hr>\n"
+                        + "\n"
+                        + "                <div class=\"row p-1\"></div>\n"
+                        + "\n"
+                        + "                <div class=\"row\">\n"
+                        + "                    <label class=\"col-md-3\"></label>\n"
+                        + "                    <input type=\"submit\" value=\"Submit\" class=\"col-md-6 btn btn-primary btn-block\">\n"
+                        + "                    <label class=\"col-md-3\"></label>\n"
+                        + "                </div>\n"
+                        + "            </form>\n");
+                out.println("<div class=\"row p-1\"></div>");
+                out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                out.println("<button value=\"dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"user/dashboard\">Go back to dashboard</a></div>");
+                out.println("<div class=\"row p-1\"></div>");
+                out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./logout\">Logout</a></div>"
+                        + "    </body>\n"
+                        + "</html>");
+            } else { //public
+                out.println("<!DOCTYPE html>\n"
+                        + "\n"
+                        + "<html>\n"
+                        + "    <head>\n"
+                        + "        <title>Photo Repository</title>\n"
+                        + "        <meta charset=\"UTF-8\">\n"
+                        + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                        + "        <!-- Latest compiled and minified CSS -->\n"
+                        + "        <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">\n"
+                        + "        <!-- jQuery library -->\n"
+                        + "        <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>\n"
+                        + "        <!-- Popper JS -->\n"
+                        + "        <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js\"></script>\n"
+                        + "        <!-- Latest compiled JavaScript -->\n"
+                        + "        <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\"></script>\n"
+                        + "    </head>\n"
+                        + "    <body>\n"
+                        + "        <nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
+                        + "            <h2>Photo Search Page</h2>\n"
+                        + "        </nav>\n"
+                        + "        <div class=\"container-fluid\">\n"
+                        + "            <div class=\"h5 text-center\">\n"
+                        + "                Search photos with keywords\n"
+                        + "            </div>\n"
+                        + "<div><h4><center>You are in <b>Public</b> page</center>"
+                        + "Click <a href=\"./login.jsp\">Here</a> if you want to log in</h4></div>"
+                        + "            <form action=\"search_results\" method=\"post\" enctype=\"multipart/form-data\">\n"
+                        + "                <div class=\"row p-1\"></div>\n"
+                        + "                <div class=\"row\" id=\"newRow1\">\n"
+                        + "                    <label class=\"col-md-4\"></label>\n"
+                        + "                    <label class=\"col-md-2\">Keyword 1:</label>\n"
+                        + "                    <div class=\"col-md-3\">\n"
                         + "                        <input type=\"text\" name=\"kw1\" class=\"form-control\">\n"
                         + "                    </div>\n"
                         + "                    <label class=\"col-md-2\"></label>\n"
@@ -94,20 +166,12 @@ public class photoSearch extends HttpServlet {
                         + "\n"
                         + "                <div class=\"row\">\n"
                         + "                    <label class=\"col-md-3\"></label>\n"
-                        + "                    <input type=\"submit\" value=\"Submit\" class=\"col-md-6 btn btn-primary btn-block\">\n"
+                        + "                    <input type=\"submit\" value=\"public\" class=\"col-md-6 btn btn-primary btn-block\">\n"
                         + "                    <label class=\"col-md-3\"></label>\n"
                         + "                </div>\n"
-                        + "            </form>\n");
-                out.println("<div class=\"row p-1\"></div>");
-                out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
-                out.println("<button value=\"dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"dashboard\">Go back to dashboard</a></div>");
-                out.println("<div class=\"row p-1\"></div>");
-                out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
-                out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>"
+                        + "            </form>\n"
                         + "    </body>\n"
                         + "</html>");
-            } else {
-                response.sendRedirect(request.getContextPath());
             }
         }
     }

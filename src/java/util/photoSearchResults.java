@@ -48,26 +48,62 @@ public class photoSearchResults extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        //session.removeAttribute("userName"); //cannot access to /dashboard directly
+        String keyword1 = request.getParameter("keyword1");
+        String keyword2 = request.getParameter("keyword2");
+        String keyword3 = request.getParameter("keyword3");
+        String public_keyword1 = request.getParameter("kw1");
+        String public_keyword2 = request.getParameter("kw2");
+        String public_keyword3 = request.getParameter("kw3");
+        
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) { //logged in version
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String selectMyPhotoString = "SELECT image_data, file_name FROM photos WHERE user_login=?";
-                        String selectSharedWithMeString = "SELECT image_data, user_login, file_name FROM photos "
-                                + "WHERE share_to1=? or share_to2=? or share_to3=?;";
-
-                        try (PreparedStatement selectMyPhotoStatement = dbConn.prepareStatement(selectMyPhotoString)) {
-                            selectMyPhotoStatement.setString(1, login);
-                            ResultSet rsMyPhoto = selectMyPhotoStatement.executeQuery();//user's photo
-//                            byte[] myPhoto = rsMyPhoto.getBytes("photo");
-
-                            PreparedStatement selectSharedWithMeStatement = dbConn.prepareStatement(selectSharedWithMeString);
-                            selectSharedWithMeStatement.setString(1, login);
-                            selectSharedWithMeStatement.setString(2, login);
-                            selectSharedWithMeStatement.setString(3, login);
-                            ResultSet rsSharedPhoto = selectSharedWithMeStatement.executeQuery();//photo shared to user
+                        String selectMyPhotoString1 = "SELECT image_data, file_name FROM photos WHERE (keyword1=? or keyword2=? or keyword3=?) and (user_login=?)";
+                        String selectMyPhotoString2 = "SELECT image_data, file_name FROM photos WHERE (keyword1=? or keyword2=? or keyword3=?) and (user_login=?)";
+                        String selectMyPhotoString3 = "SELECT image_data, file_name FROM photos WHERE (keyword1=? or keyword2=? or keyword3=?) and (user_login=?)";
+                        String selectSharedWithMeString1 = "SELECT image_data, user_login, file_name FROM photos "
+                                + "WHERE (share_to1=? or share_to2=? or share_to3=?) and (keyword1=? or keyword2=? or keyword3=?)";
+                        String selectSharedWithMeString2 = "SELECT image_data, user_login, file_name FROM photos "
+                                + "WHERE (share_to1=? or share_to2=? or share_to3=?) and (keyword1=? or keyword2=? or keyword3=?)";
+                        String selectSharedWithMeString3 = "SELECT image_data, user_login, file_name FROM photos "
+                                + "WHERE (share_to1=? or share_to2=? or share_to3=?) and (keyword1=? or keyword2=? or keyword3=?)";
+                        
+                        try (PreparedStatement selectMyPhotoStatement1 = dbConn.prepareStatement(selectMyPhotoString1)) {
+                            selectMyPhotoStatement1.setString(1, keyword1);
+                            selectMyPhotoStatement1.setString(2, keyword1);
+                            selectMyPhotoStatement1.setString(3, keyword1);
+                            selectMyPhotoStatement1.setString(4, login);
+                            ResultSet rsMyPhoto1 = selectMyPhotoStatement1.executeQuery();//user's photo
+                            PreparedStatement selectMyPhotoStatement2 = dbConn.prepareStatement(selectMyPhotoString2);
+                            selectMyPhotoStatement2.setString(1, keyword2);
+                            selectMyPhotoStatement1.setString(2, keyword2);
+                            selectMyPhotoStatement1.setString(3, keyword2);
+                            selectMyPhotoStatement1.setString(4, login);
+                            ResultSet rsMyPhoto2 = selectMyPhotoStatement2.executeQuery();
+                            PreparedStatement selectMyPhotoStatement3 = dbConn.prepareStatement(selectMyPhotoString3);
+                            selectMyPhotoStatement3.setString(1, keyword3);
+                            selectMyPhotoStatement1.setString(2, keyword3);
+                            selectMyPhotoStatement1.setString(3, keyword3);
+                            selectMyPhotoStatement1.setString(4, login);
+                            ResultSet rsMyPhoto3 = selectMyPhotoStatement3.executeQuery();
+                            
+                            PreparedStatement selectSharedWithMeStatement1 = dbConn.prepareStatement(selectSharedWithMeString1);
+                            selectSharedWithMeStatement1.setString(1, login);
+                            selectSharedWithMeStatement1.setString(2, login);
+                            selectSharedWithMeStatement1.setString(3, login);
+                            ResultSet rsSharedPhoto1 = selectSharedWithMeStatement1.executeQuery();//photo shared to user
+                            PreparedStatement selectSharedWithMeStatement2 = dbConn.prepareStatement(selectSharedWithMeString2);
+                            selectSharedWithMeStatement2.setString(1, login);
+                            selectSharedWithMeStatement2.setString(2, login);
+                            selectSharedWithMeStatement2.setString(3, login);
+                            ResultSet rsSharedPhoto2 = selectSharedWithMeStatement2.executeQuery();
+                            PreparedStatement selectSharedWithMeStatement3 = dbConn.prepareStatement(selectSharedWithMeString3);
+                            selectSharedWithMeStatement3.setString(1, login);
+                            selectSharedWithMeStatement3.setString(2, login);
+                            selectSharedWithMeStatement3.setString(3, login);
+                            ResultSet rsSharedPhoto3 = selectSharedWithMeStatement3.executeQuery();
 
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
@@ -94,7 +130,7 @@ public class photoSearchResults extends HttpServlet {
                                     + "            <h2>Photo Repository App</h2>\n"
                                     + "        </nav>");
                             out.println("           <div class=\"h5 text-center\">\n"
-                                    + "                Dashboard - Manage your photos\n"
+                                    + "                Search Results Page\n"
                                     + "            </div>");
                             out.println("<div><h4><center>You have logged in as <b>" + login
                                     //+ "(type:" + type + ")" 
@@ -105,14 +141,80 @@ public class photoSearchResults extends HttpServlet {
                             out.println("<div class=\"row\">");
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
-                            out.println("<p>My Photos</p>");
+                            out.println("<p>Photos Owned by Me</p>");
                             int i = 1;
-                            while (rsMyPhoto.next()) {
-                                String filename = rsMyPhoto.getString(2);
+                            while (rsMyPhoto1.next()) {
+                                String filename = rsMyPhoto1.getString(2);
 //                                String path = request.getContextPath();
 
                                 //Read the image data from the db, resize the image, and place a base64 string
-                                BufferedImage image = ImageIO.read(rsMyPhoto.getBinaryStream(1));
+                                BufferedImage image = ImageIO.read(rsMyPhoto1.getBinaryStream(1));
+                                BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = resizedImage.createGraphics();
+                                graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                graphics2D.dispose();
+                                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                ImageIO.write(resizedImage, "jpeg", bos);
+                                out.println("<div class=\"row\">"
+                                        + "<label class=\"col-md-1\"></label>");
+                                out.println("<span>\n");
+                                out.println(" <label class=\"form-check-label\">");
+                                out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedMyPhoto\" class=\"form-check-input\" value=" + filename + ">" + i
+                                        + ") </label>\n"
+                                        + " </span>");
+                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
+
+//                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
+                                out.println("<p>(" + filename + ")</p>");
+                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
+//                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='permissions';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
+                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("</div>");//row
+                                out.println("<div class=\"row p-1\"></div>");
+                                i++;
+                            }
+                            while (rsMyPhoto2.next()) {
+                                String filename = rsMyPhoto2.getString(2);
+//                                String path = request.getContextPath();
+
+                                //Read the image data from the db, resize the image, and place a base64 string
+                                BufferedImage image = ImageIO.read(rsMyPhoto1.getBinaryStream(1));
+                                BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = resizedImage.createGraphics();
+                                graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                graphics2D.dispose();
+                                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                ImageIO.write(resizedImage, "jpeg", bos);
+                                out.println("<div class=\"row\">"
+                                        + "<label class=\"col-md-1\"></label>");
+                                out.println("<span>\n");
+                                out.println(" <label class=\"form-check-label\">");
+                                out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedMyPhoto\" class=\"form-check-input\" value=" + filename + ">" + i
+                                        + ") </label>\n"
+                                        + " </span>");
+                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
+
+//                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
+                                out.println("<p>(" + filename + ")</p>");
+                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
+//                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='permissions';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
+                                out.println("<label class=\"col-sm\"></label>");
+                                out.println("</div>");//row
+                                out.println("<div class=\"row p-1\"></div>");
+                                i++;
+                            }
+                            while (rsMyPhoto3.next()) {
+                                String filename = rsMyPhoto3.getString(2);
+//                                String path = request.getContextPath();
+
+                                //Read the image data from the db, resize the image, and place a base64 string
+                                BufferedImage image = ImageIO.read(rsMyPhoto1.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
                                 Graphics2D graphics2D = resizedImage.createGraphics();
                                 graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
@@ -145,11 +247,71 @@ public class photoSearchResults extends HttpServlet {
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
                             out.println("<p>Photos Shared with Me</p>");
                             int j = 1;
-                            while (rsSharedPhoto.next()) {
-                                String shared_from = rsSharedPhoto.getString(2);
-                                String filename = rsSharedPhoto.getString(3);
+                            while (rsSharedPhoto1.next()) {
+                                String shared_from = rsSharedPhoto1.getString(2);
+                                String filename = rsSharedPhoto1.getString(3);
 //                                String path = request.getContextPath();
-                                BufferedImage image = ImageIO.read(rsSharedPhoto.getBinaryStream(1));
+                                BufferedImage image = ImageIO.read(rsSharedPhoto1.getBinaryStream(1));
+                                BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = resizedImage.createGraphics();
+                                graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                graphics2D.dispose();
+                                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                ImageIO.write(resizedImage, "jpeg", bos);
+                                out.println("<div class=\"row\">"
+                                        + "<label class=\"col-md-1\"></label>");
+                                out.println("<span>\n");
+                                out.println(" <label class=\"form-check-label\">\n");
+                                out.println(" <input type=\"checkbox\" id=\"check\" name=\"checkedShare\" class=\"form-check-input\" value=\"selection\">" + j
+                                        + ") </label>\n"
+                                        + " </span>");
+                                out.println("<label class=\"col-md-1\"></label>");
+                                out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\" width=\"100px\" height=\"auto\">");
+                                out.println("<label class=\"col-md-1\"></label>");
+                                out.println("<label class=\"col-md-1\">Shared from: <i>" + shared_from + "</i> ("
+                                        + filename + ")</label>");
+
+//                                out.println("<img src=\"" + path + "/imageFolder/" + shared_from + "/" + filename + "\">");
+                                out.println("<div class=\"row p-1\"></div>");
+                                out.println("</div>");//row
+                                out.println("<div class=\"row p-1\"></div>");
+                                j++;
+                            }
+                            while (rsSharedPhoto2.next()) {
+                                String shared_from = rsSharedPhoto2.getString(2);
+                                String filename = rsSharedPhoto2.getString(3);
+//                                String path = request.getContextPath();
+                                BufferedImage image = ImageIO.read(rsSharedPhoto2.getBinaryStream(1));
+                                BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = resizedImage.createGraphics();
+                                graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                graphics2D.dispose();
+                                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                ImageIO.write(resizedImage, "jpeg", bos);
+                                out.println("<div class=\"row\">"
+                                        + "<label class=\"col-md-1\"></label>");
+                                out.println("<span>\n");
+                                out.println(" <label class=\"form-check-label\">\n");
+                                out.println(" <input type=\"checkbox\" id=\"check\" name=\"checkedShare\" class=\"form-check-input\" value=\"selection\">" + j
+                                        + ") </label>\n"
+                                        + " </span>");
+                                out.println("<label class=\"col-md-1\"></label>");
+                                out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\" width=\"100px\" height=\"auto\">");
+                                out.println("<label class=\"col-md-1\"></label>");
+                                out.println("<label class=\"col-md-1\">Shared from: <i>" + shared_from + "</i> ("
+                                        + filename + ")</label>");
+
+//                                out.println("<img src=\"" + path + "/imageFolder/" + shared_from + "/" + filename + "\">");
+                                out.println("<div class=\"row p-1\"></div>");
+                                out.println("</div>");//row
+                                out.println("<div class=\"row p-1\"></div>");
+                                j++;
+                            }
+                            while (rsSharedPhoto3.next()) {
+                                String shared_from = rsSharedPhoto3.getString(2);
+                                String filename = rsSharedPhoto3.getString(3);
+//                                String path = request.getContextPath();
+                                BufferedImage image = ImageIO.read(rsSharedPhoto3.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
                                 Graphics2D graphics2D = resizedImage.createGraphics();
                                 graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
@@ -180,19 +342,18 @@ public class photoSearchResults extends HttpServlet {
                             out.println("</div>");//row
                             out.println("<hr>");
                             out.println("<div class=\"row\">\n"
-                                    + "<label class=\"col-md-2\"></label>\n"
+                                    + "<label class=\"col-md-5\"></label>\n"
                                     + "<input type=\"submit\" value=\"Download Selected Image\" name=\"action\" class=\"col-md-2 btn btn-primary btn-block\">\n"
-                                    + "<label class=\"col-md-1\"></label>"
-                                    + "<input type=\"submit\" value=\"Delete Selected Image\" name=\"action\" class=\"col-md-2 btn btn-danger btn-block\">\n"
-                                    + "<label class=\"col-md-1\"></label>");
+                                    + "<label class=\"col-md-5\"></label>");
                             out.println("</form>"
                                     + " </div>");
-                            out.println("<div class=\"row p-1\"></div>"
-                                    + "<div class=\"row\"><label class=\"col-md-8\"></label>"
-                                    + "<button value=\"Upload New Image\" name=\"upload\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./upload\">Upload New Image</a></button></div>");
                             out.println("<div class=\"row p-1\"></div>");
                             out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
-                            out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>");
+                            out.println("<button value=\"dashboard\" name=\"dashboard\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./user/dashboard\">Go back to dashboard</a></div>");
+                            
+                            out.println("<div class=\"row p-1\"></div>");
+                            out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                            out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./logout\">Logout</a></div>");
                             out.println("</body>");
                             out.println("</html>");
                         }
@@ -216,7 +377,7 @@ public class photoSearchResults extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("dashboard");
+        response.sendRedirect(request.getContextPath());
     }
 
     /**
