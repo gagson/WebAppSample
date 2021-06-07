@@ -97,7 +97,7 @@ public class UserDashboard extends HttpServlet {
                                     + "</b></center></h4></div>");
                             out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
                             out.println("<hr>");//how to separate it
-                            out.println(" <form action=\"upload\" method=\"post\" enctype=\"multipart/form-data\">");
+                            out.println(" <form action=\"receive_download\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
@@ -172,10 +172,13 @@ public class UserDashboard extends HttpServlet {
                             out.println("<hr>");
                             out.println("<div class=\"row\">\n"
                                     + "<label class=\"col-md-3\"></label>\n"
-                                    + "<input type=\"submit\" value=\"Download Selected Image\" name=\"action\" class=\"col-md-2 btn btn-primary btn-block\">\n"
+                                    + "<input type=\"submit\" value=\"Download Selected Image\" onclick=\"form.action='receive_download';\" name=\"action\" class=\"col-md-2 btn btn-primary btn-block\">\n"
                                     + "<label class=\"col-md-2\"></label>"
-                                    + "<input type=\"submit\" value=\"Delete Selected Image\" name=\"action\" class=\"col-md-2 btn btn-danger btn-block\">\n"
+                                    + "<input type=\"submit\" value=\"Delete Selected Image\" onclick=\"form.action='receive_removeImage';\" name=\"action\" class=\"col-md-2 btn btn-danger btn-block\">\n"
                                     + "<label class=\"col-md-3\"></label>\n");
+                            out.println("<div class=\"row p-1\"></div>"
+                                    + "<label class=\"col-md-7\"></label>"
+                                    + "<p>(Only you owned images could be deleted)</p>");
                             out.println("</form>"
                                     + " </div>");
                             out.println("<div class=\"row p-1\"></div>"

@@ -24,7 +24,7 @@ import org.sqlite.SQLiteDataSource;
  *
  * @author gagso
  */
-public class ReceiveDashboardForm extends HttpServlet {
+public class ReceiveRemoveImage extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,44 +43,38 @@ public class ReceiveDashboardForm extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        String[] checkedPhotos = request.getParameterValues("checkedMyPhoto");
+        String[] removeImages = request.getParameterValues("checkedMyPhoto");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
+
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String insertString = "SELECT keyword1, keyword2, keyword3 FROM photos WHERE filename=?";
-                        try (PreparedStatement selectStatement = dbConn.prepareStatement(insertString)) {
+                        String removeImageString = "DELETE FROM photos WHERE file_name=? AND user_login=?";
 
-                            out.println("<!DOCTYPE html>");
-                            out.println("<html>");
-                            out.println("<head>");
-                            out.println("<title>Photo Repository App</title>");
-                            out.println("</head>");
-                            out.println("<body>");
-                            out.println("<h1>Edit keywords: </h1>");
-                            for (int i = 1; i < checkedPhotos.length + 1; i++) {
-                                selectStatement.setString(i, checkedPhotos[i]);
-                                ResultSet rs = selectStatement.executeQuery();
-                                while (rs.next()) {
-                                    String keyword = rs.getString(1);
-                                    out.println("<p>" + keyword + "</p>");
-                                }
+                        try (PreparedStatement deleteStatement = dbConn.prepareStatement(removeImageString)) {
+                            for (int i = 0; i < removeImages.length; i++) {
+                                deleteStatement.setString(1, removeImages[i]);
+                                deleteStatement.setString(2, login);
+                                deleteStatement.executeUpdate();
                             }
-                            out.println("</body>");
-                            out.println("</html>");
-
                         }
-//                        } else {
-//                            response.sendRedirect("dashboard");
-//                        }
                     }
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Photo Repository App</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Success!!</h1>");
+                    out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                    out.println("</body>");
+                    out.println("</html>");
                 }
             }
-            /* TODO output your page here. You may use following sample code. */
-
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -98,7 +92,7 @@ public class ReceiveDashboardForm extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ReceiveDashboardForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReceiveRemoveImage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -116,7 +110,7 @@ public class ReceiveDashboardForm extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ReceiveDashboardForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReceiveRemoveImage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

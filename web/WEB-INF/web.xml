@@ -52,8 +52,8 @@
         <multipart-config/>
     </servlet>
     <servlet>
-        <servlet-name>ReceiveDashboardForm</servlet-name>
-        <servlet-class>user.ReceiveDashboardForm</servlet-class>
+        <servlet-name>ReceiveDownloadForm</servlet-name>
+        <servlet-class>user.ReceiveDownloadForm</servlet-class>
         <multipart-config/>
     </servlet>
     <servlet>
@@ -84,6 +84,11 @@
     <servlet>
         <servlet-name>ReceiveRemoveUser</servlet-name>
         <servlet-class>admin.ReceiveRemoveUser</servlet-class>
+        <multipart-config/>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceiveRemoveImage</servlet-name>
+        <servlet-class>user.ReceiveRemoveImage</servlet-class>
         <multipart-config/>
     </servlet>
     <servlet-mapping>
@@ -132,8 +137,8 @@
         <url-pattern>/user/permissions</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ReceiveDashboardForm</servlet-name>
-        <url-pattern>/user/receive_dashboard_form</url-pattern>
+        <servlet-name>ReceiveDownloadForm</servlet-name>
+        <url-pattern>/user/receive_download</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReceiveEditKeyword</servlet-name>
@@ -158,6 +163,10 @@
     <servlet-mapping>
         <servlet-name>ReceiveRemoveUser</servlet-name>
         <url-pattern>/admin/receive_removeUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveRemoveImage</servlet-name>
+        <url-pattern>/user/receive_removeImage</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
