@@ -8,6 +8,7 @@ package admin;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -42,14 +43,16 @@ public class AdminDashboard extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        //session.removeAttribute("userName"); //cannot access to /dashboard directly
+        
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
                 ServletContext application = getServletContext();
                 SQLiteDataSource dataSource = (SQLiteDataSource) application.getAttribute("dataSource");
                 try (Connection dbConn = dataSource.getConnection()) {
                     String manageQuery = "SELECT login, type, status FROM credential";
-                    ResultSet rs = dbConn.createStatement().executeQuery(manageQuery);
+//                    ResultSet rs = dbConn.createStatement().executeQuery(manageQuery);
+                    PreparedStatement manageStatement = dbConn.prepareStatement(manageQuery);
+                    ResultSet rsManage = manageStatement.executeQuery();
                     out.println("<!DOCTYPE html>\n"
                             + "\n"
                             + "<html>\n"
@@ -58,7 +61,7 @@ public class AdminDashboard extends HttpServlet {
                             + "table, th, td {"
                             + "border: 1px solid black;}"
                             + "</style>"
-                            + "        <title>Photo Storage App</title>\n"
+                            + "        <title>Photo Repository App</title>\n"
                             + "        <meta charset=\"UTF-8\">\n"
                             + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
                             + "        <!-- Latest compiled and minified CSS -->\n"
@@ -72,63 +75,68 @@ public class AdminDashboard extends HttpServlet {
                             + "    </head>\n"
                             + "    <body>\n"
                             + "        <nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
-                            + "            <h2>Photo Storage App</h2>\n"
+                            + "            <h2>Photo Repository App</h2>\n"
                             + "        </nav>\n"
                             + "        <div class=\"container-fluid\">\n"
                             + "            <div class=\"h5 text-center\">\n"
                             + "                Admin Dashboard: Manage Users Page\n"
-                            + "            </div>\n"
-                            + "            <form action=\"do_upload\" method=\"post\" enctype=\"multipart/form-data\">\n"
-                            + "                <div class=\"row\" id=\"manageUser\">\n");
+                            + "            </div>");
+                    out.println("<div><h4><center>You have logged in as <b>" + login
+                            + "</b></center></h4></div>");
+                    out.println("        </div>\n"
+                            + "            <form action=\"./receive\" method=\"post\" enctype=\"multipart/form-data\">\n"
+                            + "                <div class=\"row p-1\"></div>\n");
 //                            + "                    <div class=\"col-md-3\">\n"
 //                            +"<div class=\"col-md-3\">\n");
-                    while (rs.next()) {
-                        String username = rs.getString("login");
-                        String role = rs.getString("type");
-                        String status = rs.getString("status");
-                        out.println("<div class=\"row\" id=\"manageUser\">");
-                        out.println("<label class=\"col-md-1\"></label>\n");
-                        out.println("<label class=\"col-md-2\">Username:</label>\n" + username + "");
-                        out.println("<label class=\"col-md-1\">Role:</label>\n" + role + "");
-                        out.println("<label class=\"col-md-1\">Status:</label>\n" + status + "");
+                    while (rsManage.next()) {
+                        String username = rsManage.getString(1);
+                        String role = rsManage.getString(2);
+                        String status = rsManage.getString(3);
+                        out.println("<div class=\"row\" id=\"manageUser\">"
+                                + "                    <label class=\"col-md-2\"></label>\n");
+                        out.println("<div class=\"col-md-2\">\n");
+                        out.println("<label class=\"col-md-1\">Username</label>\n");
+                        out.println("<input type=\"text\" name=\"username\" class=\"form-control\" value=\"" + username + "\">");
+                        out.println("</div>");
+                        out.println("<div class=\"col-md-2\">\n");
+                        out.println("<label class=\"col-md-1\">Role</label>\n");
+                        out.println("<input type=\"text\" name=\"originalRole\" class=\"form-control\" value=\"" + role + "\">");
+                        out.println("</div>");
+                        out.println("<div class=\"col-md-2\">\n");
+                        out.println("<label class=\"col-md-1\">Status</label>\n");
+                        out.println("<input type=\"text\" name=\"originalStatus\" class=\"form-control\" value=\"" + status + "\">");
+                        out.println("</div>\n");
 //                        out.println("</div>");
-//                        out.println(username + "::");
-//                        out.println(role + "::");
-//                        out.println(status + "::");
-                    
 
-                    out.println("				<button type=\"button\" name=\"edit\" class=\"btn btn-outline-primary\">Edit</button>\n"
-                            + "					<button type=\"button\" name=\"delete\" class=\"btn btn-outline-danger\">Delete</button>\n"
-                            + "					<button type=\"button\" name=\"status\" class=\"btn btn-outline-dark\">Disable/Enable</button>\n"
-                            + "					</div></div>\n");
-                            }
-                            out.println("		<hr>\n"
+                        out.println("<button type=\"submit\" value=\"" + username + "\" name=\"edit\" class=\"btn btn-outline-primary\">Edit Role</button>\n"
+                                + "	<button type=\"submit\" value=\"" + username + "\"name=\"delete\" class=\"btn btn-outline-danger\">Delete</button>\n"
+                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"status\" class=\"btn btn-outline-dark\">Disable/Enable</button>\n"
+                                + "                    <label class=\"col-md-2\"></label>\n"
+                                + " </div></div>\n");
+                    }
+
+                    out.println("		<hr>\n"
                             + "				<div class=\"h6 text-center\">\n"
                             + "                Add New User\n"
                             + "				</div>\n"
                             + "				<div class=\"row p-1\"></div>\n"
                             + "                <div class=\"row\" id=\"newRow\">\n"
+                            +"                    <label class=\"col-md-1\"></label>\n"
                             + "                    <label class=\"col-md-1\">Username:</label>\n"
                             + "                    <div class=\"col-md-3\">\n"
-                            + "                        <input type=\"text\" name=\"username\" class=\"form-control\" required>\n"
+                            + "                        <input type=\"text\" name=\"addUsername\" class=\"form-control\">\n"
                             + "                    </div>\n"
                             + "					<label class=\"col-md-1\">Password:</label>\n"
                             + "					<div class=\"col-md-3\">\n"
-                            + "                        <input type=\"password\" name=\"password\" class=\"form-control\" required>\n"
+                            + "                        <input type=\"password\" name=\"addPassword\" class=\"form-control\">\n"
                             + "                    </div>\n"
                             + "					<label>Role:</label>\n"
                             + "					<div class=\"col-md-1\">\n"
-                            + "					<select name=\"role\">\n"
+                            + "					<select name=\"addRole\">\n"
                             + "					<option value =\"ordinary\">Ordinary</option>\n"
                             + "					<option value =\"admin\">Admin</option>\n"
                             + "					</select> \n"
                             + "					</div>\n"
-                            + "                    <div class=\"col-md-1\">\n"
-                            + "                        <button id=\"addRow\" type=\"button\" class=\"btn btn-success rounded-circle\">＋</button>\n"
-                            + "                    </div>\n"
-                            + "                    <div class=\"col-md-1\">\n"
-                            + "                        <button id=\"removeRow\" type=\"button\" class=\"btn btn-danger rounded-circle\">ー</button>\n"
-                            + "                    </div>\n"
                             + "                    <label class=\"col-md-2\"></label>\n"
                             + "                </div>\n"
                             + "                <div class=\"row p-1\"></div>\n"
@@ -139,70 +147,13 @@ public class AdminDashboard extends HttpServlet {
                             + "\n"
                             + "                <div class=\"row\">\n"
                             + "                    <label class=\"col-md-3\"></label>\n"
-                            + "                    <input type=\"submit\" value=\"Submit\" class=\"col-md-6 btn btn-primary btn-block\">\n"
+                            + "                    <input type=\"submit\" value=\"Submit\" onclick=\"form.action='./add_user';\" class=\"col-md-6 btn btn-primary btn-block\">\n"
                             + "                    <label class=\"col-md-3\"></label>\n"
                             + "                </div>\n"
-                            + "            </form>\n"
-                            + "\n"
-                            + "            <script>\n"
-                            + "			var max_add = 9;\n"
-                            + "			var i = 0;\n"
-                            + "			\n"
-                            + "                $(document).on('click', '#addRow', function () {\n"
-                            + "					var html = '';\n"
-                            + "                    html += '<div class=\"row\" id=\"newRow\">';\n"
-                            + "                    html += '<label class=\"col-md-1\">Username:</label>';\n"
-                            + "                    html += '<div class=\"col-md-3\">';\n"
-                            + "                    html += '<input type=\"text\" name=\"username\" class=\"form-control\" required>';\n"
-                            + "                    html += '</div>';\n"
-                            + "					html += '<label class=\"col-md-1\">Password:</label>';\n"
-                            + "					html += '<div class=\"col-md-3\">';\n"
-                            + "                    html += '<input type=\"password\" name=\"password\" class=\"form-control\" required>';\n"
-                            + "                    html += '</div>';\n"
-                            + "					html += '<label>Role:</label>';\n"
-                            + "					html += '<div class=\"col-md-1\">';\n"
-                            + "					html += '<select name=\"role\">';\n"
-                            + "					html += '<option value =\"ordinary\">Ordinary</option>';\n"
-                            + "					html += '<option value =\"admin\">Admin</option>';\n"
-                            + "					html += '</select>';\n"
-                            + "					html += '</div>';\n"
-                            + "                    html += '<div class=\"col-md-1\">';\n"
-                            + "                    html += '   <button id=\"addRow\" type=\"button\" class=\"btn btn-success rounded-circle\">＋</button>';\n"
-                            + "                    html += '</div>';\n"
-                            + "                    html += '<div class=\"col-md-1\">';\n"
-                            + "                    html += '    <button id=\"removeRow\" type=\"button\" class=\"btn btn-danger rounded-circle\">ー</button>';\n"
-                            + "                    html += '</div>';\n"
-                            + "                    html += '<label class=\"col-md-2\"></label>';\n"
-                            + "					html += '</div>';\n"
-                            + "					\n"
-                            + "					if (i < max_add){\n"
-                            + "                    $('#newRow:last').after(html);\n"
-                            + "					i++;\n"
-                            + "					}\n"
-                            + "					else {\n"
-                            + "					window.alert(\"You can add up to 10 users at once only!\");\n"
-                            + "					}\n"
-                            + "				\n"
-                            + "                });\n"
-                            + "                $(document).on('click', '#removeRow', function () {\n"
-                            + "                    if (i > 0){\n"
-                            + "					$(this).closest('#newRow').remove();\n"
-                            + "					i--;\n"
-                            + "					}\n"
-                            + "					else {\n"
-                            + "					window.alert(\"You cannot remove the only row!\");\n"
-                            + "					}\n"
-                            + "                });\n"
-                            + "                function preview() {\n"
-                            + "                    frame.src = URL.createObjectURL(event.target.files[0]);\n"
-                            + "                }\n"
-                            + "                $(\".custom-file-input\").on(\"change\", function () {\n"
-                            + "                    var fileName = $(this).val().split(\"\\\\\").pop();\n"
-                            + "                    $(this).siblings(\".custom-file-label\").addClass(\"selected\").html(fileName);\n"
-                            + "                });\n"
-                            + "				\n"
-                            + "            </script>\n"
-                            + "\n"
+                            + "            </form>\n");
+                    out.println("<div class=\"row p-1\"></div>");
+                    out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                    out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>"
                             + "    </body>\n"
                             + "</html>");
                 }

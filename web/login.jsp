@@ -46,20 +46,6 @@
                     </div>
                 </div>
                 <div class="row p-1"></div>
-<!--                <div class="row">
-                    <label class="col-md-2"></label>
-                    <label class="col-md-2">Role</label>
-                    <div class="col-md-8">
-                        <div class="form-check">
-                            <input id="idRadio1" type="radio" class="form-check-input" name="optradio" value="Admin" required>
-                            <label for="idRadio1" class="form-check-label">Administrator</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="idRadio2" type="radio" class="form-check-input" name="optradio" value="User" checked required>
-                            <label for="idRadio2" class="form-check-label">User</label>
-                        </div>
-                    </div>  
-                </div>-->
                 <div class="row p-1"></div>
                 <div class="row">
                     <label class="col-md-3"></label>
@@ -68,5 +54,12 @@
 
                 </div>
             </form>
+            <div class="row p-1"></div>
+                <div class="row">
+                    <label class="col-md-3"></label>
+                    <button value="search" name="search" class="col-md-6 btn btn-warning btn-block"><a href=search>Photo Search Page</a></div>
+                    <label class="col-md-3"></label>
+
+                </div>
     </body>
 </html>

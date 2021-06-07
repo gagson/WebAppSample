@@ -66,6 +66,16 @@
         <servlet-class>user.ReceiveEditPermission</servlet-class>
         <multipart-config/>
     </servlet>
+    <servlet>
+        <servlet-name>ReceiveAdminForm</servlet-name>
+        <servlet-class>admin.ReceiveAdminForm</servlet-class>
+        <multipart-config/>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceiveAdminAddUser</servlet-name>
+        <servlet-class>admin.ReceiveAdminAddUser</servlet-class>
+        <multipart-config/>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
@@ -122,6 +132,14 @@
     <servlet-mapping>
         <servlet-name>ReceiveEditPermission</servlet-name>
         <url-pattern>/user/receive_edit_permission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveAdminForm</servlet-name>
+        <url-pattern>/admin/receive</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveAdminAddUser</servlet-name>
+        <url-pattern>/admin/add_user</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

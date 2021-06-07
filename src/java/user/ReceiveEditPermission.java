@@ -48,6 +48,7 @@ public class ReceiveEditPermission extends HttpServlet {
         String share_to3 = request.getParameter("share_to3");
         String editPhoto = request.getParameter("permission");
         String[] share_to_public = request.getParameterValues("share_to_public");
+        String delete = request.getParameter("delete");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -76,7 +77,7 @@ public class ReceiveEditPermission extends HttpServlet {
                                         updateStatement1.setString(1, share_to1);
                                         updateStatement1.setString(2, editPhoto);
                                         updateStatement1.executeUpdate();
-                                    }
+                                    } 
                                 } else {
                                     updateStatement1null.setString(1, editPhoto);
                                     updateStatement1null.executeUpdate();
@@ -86,8 +87,8 @@ public class ReceiveEditPermission extends HttpServlet {
                                         updateStatement2.setString(1, share_to2);
                                         updateStatement2.setString(2, editPhoto);
                                         updateStatement2.executeUpdate();
-                                    }
-                                } else {
+                                    } 
+                                } else if (share_to2 == ""){
                                     updateStatement2null.setString(1, editPhoto);
                                     updateStatement2null.executeUpdate();
                                 }
@@ -96,8 +97,8 @@ public class ReceiveEditPermission extends HttpServlet {
                                         updateStatement3.setString(1, share_to3);
                                         updateStatement3.setString(2, editPhoto);
                                         updateStatement3.executeUpdate();
-                                    }
-                                } else {
+                                    } 
+                                } else if (share_to3 == ""){
                                     updateStatement3null.setString(1, editPhoto);
                                     updateStatement3null.executeUpdate();
                                 }
@@ -119,7 +120,7 @@ public class ReceiveEditPermission extends HttpServlet {
                     out.println("<!DOCTYPE html>");
                     out.println("<html>");
                     out.println("<head>");
-                    out.println("<title>File Storage</title>");
+                    out.println("<title>Photo Repository App</title>");
                     out.println("</head>");
                     out.println("<body>");
                     out.println("<h1>Success!!</h1>");

@@ -143,6 +143,7 @@ public class EditPermission extends HttpServlet {
                                     out.println("                    <div class=\"col-md-3\">\n"
                                             + "                        <input type=\"text\" name=\"share_to1\" class=\"form-control\" value=\"" + share_to1 + "\">"
                                             + "                    </div>\n");
+                                    out.println("<label class=\"col-sm\"></label>");
                                 } else {
                                     out.println("                    <div class=\"col-md-3\">\n"
                                             + "                        <input type=\"text\" name=\"share_to1\" class=\"form-control\" value=\"\">"

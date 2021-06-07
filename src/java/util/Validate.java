@@ -49,7 +49,7 @@ public class Validate extends HttpServlet {
             SQLiteDataSource dataSource = (SQLiteDataSource) application.getAttribute("dataSource");
             if (dataSource != null) { //check the datasource
                 try (Connection dbConn = dataSource.getConnection()) {
-                    String selectString = "SELECT login, type, home_folder FROM credential WHERE login=? AND secret=? AND status='active'";
+                    String selectString = "SELECT login, type, home_folder, status FROM credential WHERE login=? AND secret=? AND status='active'";
                     try (PreparedStatement selectStatement = dbConn.prepareStatement(selectString)) {
                         selectStatement.setString(1, nameParam);
                         selectStatement.setString(2, secretParam);
@@ -59,13 +59,17 @@ public class Validate extends HttpServlet {
                                 session.setAttribute("login", nameParam);
                                 session.setAttribute("type", matchingUsers.getString("type"));
                                 session.setAttribute("homeFolder", matchingUsers.getString("home_folder"));
-                                if ("admin".equals(matchingUsers.getString("type"))){ //if type is "admin"
-                                response.sendRedirect("admin/dashboard");
+                                if (matchingUsers.getString(4) != "disabled") {
+                                    if (matchingUsers.getString("type").equals("admin")) { //if type is "admin"
+                                        response.sendRedirect("admin/dashboard");
+                                    } else {
+                                        response.sendRedirect("user/dashboard");
+                                    }
                                 } else {
-                                    response.sendRedirect("user/dashboard");
+                                    response.sendRedirect(request.getContextPath());
                                 }
                             } else { //no matching in the db
-                               response.sendRedirect(request.getContextPath());
+                                response.sendRedirect(request.getContextPath());
                             }
                         }
                     }
