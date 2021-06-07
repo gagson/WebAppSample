@@ -76,6 +76,11 @@
         <servlet-class>admin.ReceiveAdminAddUser</servlet-class>
         <multipart-config/>
     </servlet>
+    <servlet>
+        <servlet-name>ReceiveChangeStatus</servlet-name>
+        <servlet-class>admin.ReceiveChangeStatus</servlet-class>
+        <multipart-config/>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
@@ -140,6 +145,10 @@
     <servlet-mapping>
         <servlet-name>ReceiveAdminAddUser</servlet-name>
         <url-pattern>/admin/add_user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveChangeStatus</servlet-name>
+        <url-pattern>/admin/receive_changeStatus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

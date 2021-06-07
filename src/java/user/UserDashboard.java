@@ -60,8 +60,6 @@ public class UserDashboard extends HttpServlet {
                         try (PreparedStatement selectMyPhotoStatement = dbConn.prepareStatement(selectMyPhotoString)) {
                             selectMyPhotoStatement.setString(1, login);
                             ResultSet rsMyPhoto = selectMyPhotoStatement.executeQuery();//user's photo
-//                            byte[] myPhoto = rsMyPhoto.getBytes("photo");
-
                             PreparedStatement selectSharedWithMeStatement = dbConn.prepareStatement(selectSharedWithMeString);
                             selectSharedWithMeStatement.setString(1, login);
                             selectSharedWithMeStatement.setString(2, login);
@@ -96,7 +94,6 @@ public class UserDashboard extends HttpServlet {
                                     + "                Dashboard - Manage your photos\n"
                                     + "            </div>");
                             out.println("<div><h4><center>You have logged in as <b>" + login
-                                    //+ "(type:" + type + ")" 
                                     + "</b></center></h4></div>");
                             out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
                             out.println("<hr>");//how to separate it
@@ -108,9 +105,6 @@ public class UserDashboard extends HttpServlet {
                             int i = 1;
                             while (rsMyPhoto.next()) {
                                 String filename = rsMyPhoto.getString(2);
-//                                String path = request.getContextPath();
-
-                                //Read the image data from the db, resize the image, and place a base64 string
                                 BufferedImage image = ImageIO.read(rsMyPhoto.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
                                 Graphics2D graphics2D = resizedImage.createGraphics();
@@ -132,7 +126,6 @@ public class UserDashboard extends HttpServlet {
                                 out.println("<p>(" + filename + ")</p>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
-//                                out.println("<label class=\"col-sm\"></label>");
                                 out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='permissions';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("</div>");//row
@@ -147,7 +140,6 @@ public class UserDashboard extends HttpServlet {
                             while (rsSharedPhoto.next()) {
                                 String shared_from = rsSharedPhoto.getString(2);
                                 String filename = rsSharedPhoto.getString(3);
-//                                String path = request.getContextPath();
                                 BufferedImage image = ImageIO.read(rsSharedPhoto.getBinaryStream(1));
                                 BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
                                 Graphics2D graphics2D = resizedImage.createGraphics();
@@ -188,7 +180,7 @@ public class UserDashboard extends HttpServlet {
                                     + " </div>");
                             out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
-                                    + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../search\">Search Photos by Keywords</a></button></div>");
+                                    + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\">Search Photos by Keywords</a></button></div>");
                             out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
                                     + "<button value=\"Upload New Image\" name=\"upload\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./upload\">Upload New Image</a></button></div>");

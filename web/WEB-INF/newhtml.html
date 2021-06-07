@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+ <style>table, th, td {border: 1px solid black;}</style>        <title>Photo Repository App</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+            <h2>Photo Repository App</h2>
+        </nav>
+        <div class="container-fluid">
+            <div class="h5 text-center">
+                Admin Dashboard: Manage Users Page
+            </div>
+<div><center>You have logged in as <b>admin</b></center></div>
+        </div>
+            <form action="./receive" method="post" enctype="multipart/form-data">
+                <div class="row p-1"></div>
+
+<div class="row" id="manageUser">                    <label class="col-md-2"></label>
+
+<div class="col-md-2">
+
+<label class="col-md-1">Username</label>
+
+<input type="text" name="username" class="form-control" value="admin">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Role</label>
+
+<input type="text" name="originalRole" class="form-control" value="admin">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Status</label>
+
+<input type="text" name="originalStatus" class="form-control" value="active">
+</div>
+
+<button type="submit" value="admin" name="edit" class="btn btn-outline-primary">Edit Role</button>
+	<button type="submit" value="admin" name="delete" class="btn btn-outline-danger">Delete</button>
+	<button type="submit" value="admin" name="status" onclick="form.action='./receive_changeStatus';" class="btn btn-outline-dark">Disable/Enable</button>
+                    <label class="col-md-2"></label>
+ </div>
+
+<div class="row" id="manageUser">                    <label class="col-md-2"></label>
+
+<div class="col-md-2">
+
+<label class="col-md-1">Username</label>
+
+<input type="text" name="username" class="form-control" value="itsme">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Role</label>
+
+<input type="text" name="originalRole" class="form-control" value="ordinary">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Status</label>
+
+<input type="text" name="originalStatus" class="form-control" value="active">
+</div>
+
+<button type="submit" value="itsme" name="edit" class="btn btn-outline-primary">Edit Role</button>
+	<button type="submit" value="itsme" name="delete" class="btn btn-outline-danger">Delete</button>
+	<button type="submit" value="itsme" name="status" onclick="form.action='./receive_changeStatus';" class="btn btn-outline-dark">Disable/Enable</button>
+                    <label class="col-md-2"></label>
+ </div>
+
+<div class="row" id="manageUser">                    <label class="col-md-2"></label>
+
+<div class="col-md-2">
+
+<label class="col-md-1">Username</label>
+
+<input type="text" name="username" class="form-control" value="user">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Role</label>
+
+<input type="text" name="originalRole" class="form-control" value="ordinary">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Status</label>
+
+<input type="text" name="originalStatus" class="form-control" value="active">
+</div>
+
+<button type="submit" value="user" name="edit" class="btn btn-outline-primary">Edit Role</button>
+	<button type="submit" value="user" name="delete" class="btn btn-outline-danger">Delete</button>
+	<button type="submit" value="user" name="status" onclick="form.action='./receive_changeStatus';" class="btn btn-outline-dark">Disable/Enable</button>
+                    <label class="col-md-2"></label>
+ </div>
+
+<div class="row" id="manageUser">                    <label class="col-md-2"></label>
+
+<div class="col-md-2">
+
+<label class="col-md-1">Username</label>
+
+<input type="text" name="username" class="form-control" value="public">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Role</label>
+
+<input type="text" name="originalRole" class="form-control" value="ordinary">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Status</label>
+
+<input type="text" name="originalStatus" class="form-control" value="active">
+</div>
+
+<button type="submit" value="public" name="edit" class="btn btn-outline-primary">Edit Role</button>
+	<button type="submit" value="public" name="delete" class="btn btn-outline-danger">Delete</button>
+	<button type="submit" value="public" name="status" onclick="form.action='./receive_changeStatus';" class="btn btn-outline-dark">Disable/Enable</button>
+                    <label class="col-md-2"></label>
+ </div>
+
+<div class="row" id="manageUser">                    <label class="col-md-2"></label>
+
+<div class="col-md-2">
+
+<label class="col-md-1">Username</label>
+
+<input type="text" name="username" class="form-control" value="gagson">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Role</label>
+
+<input type="text" name="originalRole" class="form-control" value="admin">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Status</label>
+
+<input type="text" name="originalStatus" class="form-control" value="active">
+</div>
+
+<button type="submit" value="gagson" name="edit" class="btn btn-outline-primary">Edit Role</button>
+	<button type="submit" value="gagson" name="delete" class="btn btn-outline-danger">Delete</button>
+	<button type="submit" value="gagson" name="status" onclick="form.action='./receive_changeStatus';" class="btn btn-outline-dark">Disable/Enable</button>
+                    <label class="col-md-2"></label>
+ </div>
+
+<div class="row" id="manageUser">                    <label class="col-md-2"></label>
+
+<div class="col-md-2">
+
+<label class="col-md-1">Username</label>
+
+<input type="text" name="username" class="form-control" value="test">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Role</label>
+
+<input type="text" name="originalRole" class="form-control" value="ordinary">
+</div>
+<div class="col-md-2">
+
+<label class="col-md-1">Status</label>
+
+<input type="text" name="originalStatus" class="form-control" value="disabled">
+</div>
+
+<button type="submit" value="test" name="edit" class="btn btn-outline-primary">Edit Role</button>
+	<button type="submit" value="test" name="delete" class="btn btn-outline-danger">Delete</button>
+	<button type="submit" value="test" name="status" onclick="form.action='./receive_changeStatus';" class="btn btn-outline-dark">Disable/Enable</button>
+                    <label class="col-md-2"></label>
+ </div>
+
+		<hr>
+				<div class="h6 text-center">
+                Add New User
+				</div>
+				<div class="row p-1"></div>
+                <div class="row" id="newRow">
+                    <label class="col-md-1"></label>
+                    <label class="col-md-1">Username:</label>
+                    <div class="col-md-3">
+                        <input type="text" name="addUsername" class="form-control">
+                    </div>
+					<label class="col-md-1">Password:</label>
+					<div class="col-md-3">
+                        <input type="password" name="addPassword" class="form-control">
+                    </div>
+					<label>Role:</label>
+					<div class="col-md-1">
+					<select name="addRole">
+					<option value ="ordinary">Ordinary</option>
+					<option value ="admin">Admin</option>
+					</select> 
+					</div>
+                    <label class="col-md-2"></label>
+                </div>
+                <div class="row p-1"></div>
+                <hr>
+
+               
+                <div class="row p-1"></div>
+
+                <div class="row">
+                    <label class="col-md-3"></label>
+                    <input type="submit" value="Submit" onclick="form.action='./add_user';" class="col-md-6 btn btn-primary btn-block">
+                    <label class="col-md-3"></label>
+                </div>
+            </form>
+
+<div class="row p-1"></div>
+<div class="row"><label class="col-md-8"></label>
+<button value="Logout" name="logout" class="col-md-2 btn btn-light btn-block"><a href="../logout">Logout</a></div>    </body>
+</html>

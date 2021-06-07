@@ -43,16 +43,16 @@ public class AdminDashboard extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        
+
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
                 ServletContext application = getServletContext();
                 SQLiteDataSource dataSource = (SQLiteDataSource) application.getAttribute("dataSource");
                 try (Connection dbConn = dataSource.getConnection()) {
                     String manageQuery = "SELECT login, type, status FROM credential";
-//                    ResultSet rs = dbConn.createStatement().executeQuery(manageQuery);
-                    PreparedStatement manageStatement = dbConn.prepareStatement(manageQuery);
-                    ResultSet rsManage = manageStatement.executeQuery();
+                    ResultSet rsManage = dbConn.createStatement().executeQuery(manageQuery);
+//                    PreparedStatement manageStatement = dbConn.prepareStatement(manageQuery);
+//                    ResultSet rs = manageStatement.executeQuery();
                     out.println("<!DOCTYPE html>\n"
                             + "\n"
                             + "<html>\n"
@@ -81,18 +81,20 @@ public class AdminDashboard extends HttpServlet {
                             + "            <div class=\"h5 text-center\">\n"
                             + "                Admin Dashboard: Manage Users Page\n"
                             + "            </div>");
-                    out.println("<div><h4><center>You have logged in as <b>" + login
-                            + "</b></center></h4></div>");
+                    out.println("<div><center><h6>You have logged in as <b>" + login
+                            + "</b></center></h6></div>");
                     out.println("        </div>\n"
                             + "            <form action=\"./receive\" method=\"post\" enctype=\"multipart/form-data\">\n"
                             + "                <div class=\"row p-1\"></div>\n");
 //                            + "                    <div class=\"col-md-3\">\n"
 //                            +"<div class=\"col-md-3\">\n");
+                    int i = 0;
                     while (rsManage.next()) {
                         String username = rsManage.getString(1);
                         String role = rsManage.getString(2);
                         String status = rsManage.getString(3);
-                        out.println("<div class=\"row\" id=\"manageUser\">"
+
+                        out.println("<div class=\"row\" name=\"manageUser\" id=\"" + i + "\">"
                                 + "                    <label class=\"col-md-2\"></label>\n");
                         out.println("<div class=\"col-md-2\">\n");
                         out.println("<label class=\"col-md-1\">Username</label>\n");
@@ -109,10 +111,11 @@ public class AdminDashboard extends HttpServlet {
 //                        out.println("</div>");
 
                         out.println("<button type=\"submit\" value=\"" + username + "\" name=\"edit\" class=\"btn btn-outline-primary\">Edit Role</button>\n"
-                                + "	<button type=\"submit\" value=\"" + username + "\"name=\"delete\" class=\"btn btn-outline-danger\">Delete</button>\n"
-                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"status\" class=\"btn btn-outline-dark\">Disable/Enable</button>\n"
+                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"delete\" class=\"btn btn-outline-danger\">Delete</button>\n"
+                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"status\" onclick=\"form.action='./receive_changeStatus';\" class=\"btn btn-outline-dark\">Disable/Enable</button>\n"
                                 + "                    <label class=\"col-md-2\"></label>\n"
-                                + " </div></div>\n");
+                                + " </div>\n");
+                        i++;
                     }
 
                     out.println("		<hr>\n"
@@ -121,7 +124,7 @@ public class AdminDashboard extends HttpServlet {
                             + "				</div>\n"
                             + "				<div class=\"row p-1\"></div>\n"
                             + "                <div class=\"row\" id=\"newRow\">\n"
-                            +"                    <label class=\"col-md-1\"></label>\n"
+                            + "                    <label class=\"col-md-1\"></label>\n"
                             + "                    <label class=\"col-md-1\">Username:</label>\n"
                             + "                    <div class=\"col-md-3\">\n"
                             + "                        <input type=\"text\" name=\"addUsername\" class=\"form-control\">\n"

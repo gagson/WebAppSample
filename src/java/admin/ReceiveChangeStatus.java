@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +23,7 @@ import org.sqlite.SQLiteDataSource;
  *
  * @author gagso
  */
-public class ReceiveAdminForm extends HttpServlet {
+public class ReceiveChangeStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,7 +33,6 @@ public class ReceiveAdminForm extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -45,10 +43,8 @@ public class ReceiveAdminForm extends HttpServlet {
         String homeFolder = (String) session.getAttribute("homeFolder");
 
         String username = request.getParameter("edit"); //the username
-//        String originalStatus = request.getParameter("originalStatus");
-//        String status = request.getParameter("status");
-        String originalRole = request.getParameter("originalRole");
-        String delete = request.getParameter("delete");
+        String originalStatus = request.getParameter("originalStatus");
+        String status = request.getParameter("status");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -56,38 +52,19 @@ public class ReceiveAdminForm extends HttpServlet {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String updateRole = "UPDATE credential SET type=?  WHERE login=?";
-                        String deleteAccount = "DELETE FROM credential WHERE login=?";
-//                        String updateStatus = "UPDATE credential SET status=?  WHERE login=?";
-                        try (PreparedStatement updateRoleStatement = dbConn.prepareStatement(updateRole)) {
-                            if ((String) originalRole == "ordinary") {
-                                updateRoleStatement.setString(1, "admin");
-                                updateRoleStatement.setString(2, username);
-                                updateRoleStatement.executeUpdate();
-                            } else if ((String) originalRole == "admin") {
-                                updateRoleStatement.setString(1, "ordinary");
-                                updateRoleStatement.setString(2, username);
-                                updateRoleStatement.executeUpdate();
+                        String updateStatus = "UPDATE credential SET status=?  WHERE login=?";
+                        try (PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus)) {
+                            if ("active".equals(originalStatus)) {
+                                updateStatusStatement.setString(1, "disabled");
+                                updateStatusStatement.setString(2, status);
+                                updateStatusStatement.executeUpdate();
                             }
-                            if ((delete != null)) {
-                                PreparedStatement deleteStatement = dbConn.prepareStatement(deleteAccount);
-                                deleteStatement.setString(1, delete);
-                                deleteStatement.executeUpdate();
-                            } 
-//                            if (("active".equals(originalStatus)) && ((String) username != "public")) {
-//                                PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus);
-//                                updateStatusStatement.setString(1, "disabled");
-//                                updateStatusStatement.setString(2, status);
-//                                updateStatusStatement.executeUpdate();
-//                            }
-//                            if ("disabled".equals(originalStatus)) {
-//                                PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus);
-//                                updateStatusStatement.setString(1, "active");
-//                                updateStatusStatement.setString(2, status);
-//                                updateStatusStatement.executeUpdate();
-//                            }
+                            else if (!"active".equals(originalStatus)) {
+                                updateStatusStatement.setString(1, "active");
+                                updateStatusStatement.setString(2, status);
+                                updateStatusStatement.executeUpdate();
+                            }
                         }
-
                     }
                 }
             }
@@ -134,7 +111,7 @@ public class ReceiveAdminForm extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ReceiveAdminForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReceiveChangeStatus.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
