@@ -47,7 +47,6 @@ public class UserDashboard extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        //session.removeAttribute("userName"); //cannot access to /dashboard directly
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");

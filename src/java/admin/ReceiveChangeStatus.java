@@ -57,11 +57,11 @@ public class ReceiveChangeStatus extends HttpServlet {
                         String updateStatus = "UPDATE credential SET status=?  WHERE login=?";
                         String confirmStatus = "SELECT status FROM credential WHERE login=?";
                         try (PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus)) {
-                                PreparedStatement confirmStatusStatement = dbConn.prepareStatement(confirmStatus);
-                                confirmStatusStatement.setString(1, statusUsername);
-                                ResultSet rsStatus = confirmStatusStatement.executeQuery();
-                                String status = rsStatus.getString(1);
-
+                            PreparedStatement confirmStatusStatement = dbConn.prepareStatement(confirmStatus);
+                            confirmStatusStatement.setString(1, statusUsername);
+                            ResultSet rsStatus = confirmStatusStatement.executeQuery();
+                            String status = rsStatus.getString(1);
+                            if (!statusUsername.equals(login)) {
                                 if (status.equals("active")) {
                                     updateStatusStatement.setString(1, "disabled");
                                     updateStatusStatement.setString(2, statusUsername);
@@ -71,21 +71,34 @@ public class ReceiveChangeStatus extends HttpServlet {
                                     updateStatusStatement.setString(2, statusUsername);
                                     updateStatusStatement.executeUpdate();
                                 }
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Photo Repository App</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+                                out.println("<h1>Success!!</h1>");
+                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                out.println("</body>");
+                                out.println("</html>");
+                            } else {
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Photo Repository App</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+                                out.println("<h1>You cannot disable yourself!!</h1>");
+                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                out.println("</body>");
+                                out.println("</html>");
                             }
+                        }
                     }
                 }
             }
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Photo Repository App</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Success!!</h1>");
-            out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-            out.println("</body>");
-            out.println("</html>");
+
         }
     }
 

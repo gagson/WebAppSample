@@ -27,7 +27,7 @@
         </nav>
         <div class="container-fluid">
             <div class="h8 text-center">
-                Final Assignment - Gagson Lee (20160)
+                Final Assignment (2021/6) - Gagson Lee (20160)
             </div>
             <form action="validate" method="post">
                 <div class="row">
@@ -44,6 +44,12 @@
                     <div class="col-md-6">
                         <input type="password" name="secret" class="form-control" required>
                     </div>
+                </div>
+                <div class="row p-1"></div>
+                <div class="row">
+                    <label class="col-md-3"></label>
+                    <p>**You might not able to login with a disabled account, please contact the admin.</p>
+                    <label class="col-md-3"></label>
                 </div>
                 <div class="row p-1"></div>
                 <div class="row p-1"></div>

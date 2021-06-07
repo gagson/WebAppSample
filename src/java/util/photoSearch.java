@@ -41,7 +41,7 @@ public class photoSearch extends HttpServlet {
                         + "\n"
                         + "<html>\n"
                         + "    <head>\n"
-                        + "        <title>Photo Repository</title>\n"
+                        + "        <title>Photo Repository App</title>\n"
                         + "        <meta charset=\"UTF-8\">\n"
                         + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
                         + "        <!-- Latest compiled and minified CSS -->\n"

@@ -54,20 +54,34 @@ public class ReceiveRemoveUser extends HttpServlet {
                         String deleteAccount = "DELETE FROM credential WHERE login=?";
 
                         try (PreparedStatement deleteStatement = dbConn.prepareStatement(deleteAccount)) {
-                            deleteStatement.setString(1, deleteUser);
-                            deleteStatement.executeUpdate();
+                            if (!deleteUser.equals(login)) {
+                                deleteStatement.setString(1, deleteUser);
+                                deleteStatement.executeUpdate();
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Photo Repository App</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+                                out.println("<h1>Success!!</h1>");
+                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                out.println("</body>");
+                                out.println("</html>");
+                            } else {
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Photo Repository App</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+                                out.println("<h1>You cannot delete yourself!!</h1>");
+                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                out.println("</body>");
+                                out.println("</html>");
+                            }
                         }
                     }
-                    out.println("<!DOCTYPE html>");
-                    out.println("<html>");
-                    out.println("<head>");
-                    out.println("<title>Photo Repository App</title>");
-                    out.println("</head>");
-                    out.println("<body>");
-                    out.println("<h1>Success!!</h1>");
-                    out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-                    out.println("</body>");
-                    out.println("</html>");
+
                 }
             }
         }

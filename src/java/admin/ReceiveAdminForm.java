@@ -45,7 +45,6 @@ public class ReceiveAdminForm extends HttpServlet {
         String homeFolder = (String) session.getAttribute("homeFolder");
 
         String editUsername = request.getParameter("edit"); //the username
-        
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -54,41 +53,52 @@ public class ReceiveAdminForm extends HttpServlet {
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
                         String updateRole = "UPDATE credential SET type=?  WHERE login=?";
-                        
                         String confirmRole = "SELECT type FROM credential WHERE login=?";
-                        
+
                         try (PreparedStatement updateRoleStatement = dbConn.prepareStatement(updateRole)) {
                             PreparedStatement confirmRoleStatement = dbConn.prepareStatement(confirmRole);
                             confirmRoleStatement.setString(1, editUsername);
                             ResultSet rsRole = confirmRoleStatement.executeQuery();
                             String role = rsRole.getString(1);
-
-                            if (role.equals("ordinary")) {
-                                updateRoleStatement.setString(1, "admin");
-                                updateRoleStatement.setString(2, editUsername);
-                                updateRoleStatement.executeUpdate();
+                            if (!editUsername.equals(login)) {
+                                if (role.equals("ordinary")) {
+                                    updateRoleStatement.setString(1, "admin");
+                                    updateRoleStatement.setString(2, editUsername);
+                                    updateRoleStatement.executeUpdate();
+                                } else {
+                                    updateRoleStatement.setString(1, "ordinary");
+                                    updateRoleStatement.setString(2, editUsername);
+                                    updateRoleStatement.executeUpdate();
+                                }
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Photo Repository App</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+                                out.println("<h1>Success!!</h1>");
+                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                out.println("</body>");
+                                out.println("</html>");
                             } else {
-                                updateRoleStatement.setString(1, "ordinary");
-                                updateRoleStatement.setString(2, editUsername);
-                                updateRoleStatement.executeUpdate();
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");
+                                out.println("<title>Photo Repository App</title>");
+                                out.println("</head>");
+                                out.println("<body>");
+                                out.println("<h1>You cannot change yourself to ordinary!!</h1>");
+                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                out.println("</body>");
+                                out.println("</html>");
                             }
-                            
+
                         }
 
                     }
                 }
             }
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Photo Repository App</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Success!!</h1>");
-            out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-            out.println("</body>");
-            out.println("</html>");
+
         }
     }
 

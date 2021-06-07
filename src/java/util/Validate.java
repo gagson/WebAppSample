@@ -59,7 +59,7 @@ public class Validate extends HttpServlet {
                                 session.setAttribute("login", nameParam);
                                 session.setAttribute("type", matchingUsers.getString("type"));
                                 session.setAttribute("homeFolder", matchingUsers.getString("home_folder"));
-                                if (matchingUsers.getString(4) != "disabled") {
+                                if (!"disabled".equals(matchingUsers.getString(4))) {
                                     if (matchingUsers.getString("type").equals("admin")) { //if type is "admin"
                                         response.sendRedirect("admin/dashboard");
                                     } else {
