@@ -60,7 +60,9 @@ public class photoSearch extends HttpServlet {
                         + "        <div class=\"container-fluid\">\n"
                         + "            <div class=\"h5 text-center\">\n"
                         + "                Search photos with keywords\n"
-                        + "            </div>\n"
+                        + "            </div>\n");
+                out.println("<div><center><h6>You have logged in as <b>" + login
+                            + "</b></center></h6></div>"                        
                         + "            <form action=\"search_results\" method=\"post\" enctype=\"multipart/form-data\">\n"
                         + "                <div class=\"row p-1\"></div>\n"
                         + "                <div class=\"row\" id=\"newRow1\">\n"

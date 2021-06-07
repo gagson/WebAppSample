@@ -45,7 +45,7 @@ public class AdminDashboard extends HttpServlet {
         String homeFolder = (String) session.getAttribute("homeFolder");
 
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type.equals("admin")) && (homeFolder != null)) {
                 ServletContext application = getServletContext();
                 SQLiteDataSource dataSource = (SQLiteDataSource) application.getAttribute("dataSource");
                 try (Connection dbConn = dataSource.getConnection()) {
@@ -111,8 +111,8 @@ public class AdminDashboard extends HttpServlet {
 //                        out.println("</div>");
 
                         out.println("<button type=\"submit\" value=\"" + username + "\" name=\"edit\" class=\"btn btn-outline-primary\">Edit Role</button>\n"
-                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"delete\" class=\"btn btn-outline-danger\">Delete</button>\n"
-                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"status\" onclick=\"form.action='./receive_changeStatus';\" class=\"btn btn-outline-dark\">Disable/Enable</button>\n"
+                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"delete\" onclick=\"form.action='receive_removeUser';\" class=\"btn btn-outline-danger\">Delete</button>\n"
+                                + "	<button type=\"submit\" value=\"" + username + "\" name=\"status\" onclick=\"form.action='receive_changeStatus';\" class=\"btn btn-outline-dark\">Disable/Enable</button>\n"
                                 + "                    <label class=\"col-md-2\"></label>\n"
                                 + " </div>\n");
                         i++;
@@ -154,6 +154,12 @@ public class AdminDashboard extends HttpServlet {
                             + "                    <label class=\"col-md-3\"></label>\n"
                             + "                </div>\n"
                             + "            </form>\n");
+                    out.println("<div class=\"row p-1\"></div>"
+                                    + "<div class=\"row\"><label class=\"col-md-8\"></label>"
+                                    + "<button value=\"User Dashboard\" name=\"userDashboard\" class=\"col-md-2 btn btn-dark btn-block\"><a href=\"../user/dashboard\">Your 'user' version of dashboard is here</a></button></div>");
+                    out.println("<div class=\"row p-1\"></div>"
+                            + "<div class=\"row\"><label class=\"col-md-8\"></label>"
+                            + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\">Search Photos by Keywords</a></button></div>");
                     out.println("<div class=\"row p-1\"></div>");
                     out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
                     out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>"
@@ -161,7 +167,7 @@ public class AdminDashboard extends HttpServlet {
                             + "</html>");
                 }
             } else {
-                response.sendRedirect("./login.jsp");
+                response.sendRedirect("../login.jsp");
             }
         }
     }

@@ -44,11 +44,8 @@ public class ReceiveAdminForm extends HttpServlet {
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
 
-        String username = request.getParameter("edit"); //the username
-//        String originalStatus = request.getParameter("originalStatus");
-//        String status = request.getParameter("status");
-        String originalRole = request.getParameter("originalRole");
-        String delete = request.getParameter("delete");
+        String editUsername = request.getParameter("edit"); //the username
+        
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -57,35 +54,25 @@ public class ReceiveAdminForm extends HttpServlet {
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
                         String updateRole = "UPDATE credential SET type=?  WHERE login=?";
-                        String deleteAccount = "DELETE FROM credential WHERE login=?";
-//                        String updateStatus = "UPDATE credential SET status=?  WHERE login=?";
+                        
+                        String confirmRole = "SELECT type FROM credential WHERE login=?";
+                        
                         try (PreparedStatement updateRoleStatement = dbConn.prepareStatement(updateRole)) {
-                            if ((String) originalRole == "ordinary") {
+                            PreparedStatement confirmRoleStatement = dbConn.prepareStatement(confirmRole);
+                            confirmRoleStatement.setString(1, editUsername);
+                            ResultSet rsRole = confirmRoleStatement.executeQuery();
+                            String role = rsRole.getString(1);
+
+                            if (role.equals("ordinary")) {
                                 updateRoleStatement.setString(1, "admin");
-                                updateRoleStatement.setString(2, username);
+                                updateRoleStatement.setString(2, editUsername);
                                 updateRoleStatement.executeUpdate();
-                            } else if ((String) originalRole == "admin") {
+                            } else {
                                 updateRoleStatement.setString(1, "ordinary");
-                                updateRoleStatement.setString(2, username);
+                                updateRoleStatement.setString(2, editUsername);
                                 updateRoleStatement.executeUpdate();
                             }
-                            if ((delete != null)) {
-                                PreparedStatement deleteStatement = dbConn.prepareStatement(deleteAccount);
-                                deleteStatement.setString(1, delete);
-                                deleteStatement.executeUpdate();
-                            } 
-//                            if (("active".equals(originalStatus)) && ((String) username != "public")) {
-//                                PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus);
-//                                updateStatusStatement.setString(1, "disabled");
-//                                updateStatusStatement.setString(2, status);
-//                                updateStatusStatement.executeUpdate();
-//                            }
-//                            if ("disabled".equals(originalStatus)) {
-//                                PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus);
-//                                updateStatusStatement.setString(1, "active");
-//                                updateStatusStatement.setString(2, status);
-//                                updateStatusStatement.executeUpdate();
-//                            }
+                            
                         }
 
                     }

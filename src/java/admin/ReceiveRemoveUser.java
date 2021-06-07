@@ -24,7 +24,7 @@ import org.sqlite.SQLiteDataSource;
  *
  * @author gagso
  */
-public class ReceiveChangeStatus extends HttpServlet {
+public class ReceiveRemoveUser extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +43,7 @@ public class ReceiveChangeStatus extends HttpServlet {
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
 
-        String statusUsername = request.getParameter("status");
-//        String username = request.getParameter("edit"); //the username
-//        String originalStatus = request.getParameter("originalStatus");
-//        String status = request.getParameter("status");
+        String deleteUser = request.getParameter("delete");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -54,38 +51,25 @@ public class ReceiveChangeStatus extends HttpServlet {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String updateStatus = "UPDATE credential SET status=?  WHERE login=?";
-                        String confirmStatus = "SELECT status FROM credential WHERE login=?";
-                        try (PreparedStatement updateStatusStatement = dbConn.prepareStatement(updateStatus)) {
-                                PreparedStatement confirmStatusStatement = dbConn.prepareStatement(confirmStatus);
-                                confirmStatusStatement.setString(1, statusUsername);
-                                ResultSet rsStatus = confirmStatusStatement.executeQuery();
-                                String status = rsStatus.getString(1);
+                        String deleteAccount = "DELETE FROM credential WHERE login=?";
 
-                                if (status.equals("active")) {
-                                    updateStatusStatement.setString(1, "disabled");
-                                    updateStatusStatement.setString(2, statusUsername);
-                                    updateStatusStatement.executeUpdate();
-                                } else {
-                                    updateStatusStatement.setString(1, "active");
-                                    updateStatusStatement.setString(2, statusUsername);
-                                    updateStatusStatement.executeUpdate();
-                                }
-                            }
+                        try (PreparedStatement deleteStatement = dbConn.prepareStatement(deleteAccount)) {
+                            deleteStatement.setString(1, deleteUser);
+                            deleteStatement.executeUpdate();
+                        }
                     }
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Photo Repository App</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<h1>Success!!</h1>");
+                    out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                    out.println("</body>");
+                    out.println("</html>");
                 }
             }
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Photo Repository App</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Success!!</h1>");
-            out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-            out.println("</body>");
-            out.println("</html>");
         }
     }
 

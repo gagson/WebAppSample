@@ -171,11 +171,11 @@ public class UserDashboard extends HttpServlet {
                             out.println("</div>");//row
                             out.println("<hr>");
                             out.println("<div class=\"row\">\n"
-                                    + "<label class=\"col-md-2\"></label>\n"
+                                    + "<label class=\"col-md-3\"></label>\n"
                                     + "<input type=\"submit\" value=\"Download Selected Image\" name=\"action\" class=\"col-md-2 btn btn-primary btn-block\">\n"
-                                    + "<label class=\"col-md-1\"></label>"
+                                    + "<label class=\"col-md-2\"></label>"
                                     + "<input type=\"submit\" value=\"Delete Selected Image\" name=\"action\" class=\"col-md-2 btn btn-danger btn-block\">\n"
-                                    + "<label class=\"col-md-1\"></label>");
+                                    + "<label class=\"col-md-3\"></label>\n");
                             out.println("</form>"
                                     + " </div>");
                             out.println("<div class=\"row p-1\"></div>"
