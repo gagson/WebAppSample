@@ -5,14 +5,19 @@
  */
 package user;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,42 +48,84 @@ public class ReceiveDownloadForm extends HttpServlet {
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
-        String[] checkedPhotos = request.getParameterValues("checkedMyPhoto");
+        String[] downloadImages = request.getParameterValues("checkedMyPhoto");
+        String[] downloadSharedImages = request.getParameterValues("checkedShare");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
+
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String insertString = "SELECT keyword1, keyword2, keyword3 FROM photos WHERE filename=?";
-                        try (PreparedStatement selectStatement = dbConn.prepareStatement(insertString)) {
+                        String selectPhotoString = "SELECT image_data FROM photos WHERE file_name=?";
+                        String selectSharedPhotoString = "SELECT image_data FROM photos WHERE file_name=? AND (share_to1=? or share_to2=? or share_to3=?)";
+                        try (PreparedStatement downloadStatement = dbConn.prepareStatement(selectPhotoString)) {
+                            PreparedStatement downloadSharedStatement = dbConn.prepareStatement(selectSharedPhotoString);
 
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
                             out.println("<head>");
                             out.println("<title>Photo Repository App</title>");
-                            out.println("</head>");
+                            out.println("</head>"
+                                    + "<style>"
+                                    + "img {\n"
+                                    + "  width: auto;\n"
+                                    + "  height: auto;\n"
+                                    + "}</style>");
                             out.println("<body>");
-                            out.println("<h1>Edit keywords: </h1>");
-                            for (int i = 1; i < checkedPhotos.length + 1; i++) {
-                                selectStatement.setString(i, checkedPhotos[i]);
-                                ResultSet rs = selectStatement.executeQuery();
-                                while (rs.next()) {
-                                    String keyword = rs.getString(1);
-                                    out.println("<p>" + keyword + "</p>");
+                            if (downloadImages != null) {
+                                for (int i = 0; i < downloadImages.length; i++) {
+                                    downloadStatement.setString(1, downloadImages[i]);
+                                    ResultSet rs = downloadStatement.executeQuery();
+                                    while (rs.next()) {
+                                        BufferedImage image = ImageIO.read(rs.getBinaryStream(1));
+                                        BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                        Graphics2D graphics2D = resizedImage.createGraphics();
+                                        graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                        graphics2D.dispose();
+                                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                        ImageIO.write(resizedImage, "jpeg", bos);
+                                        out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\" download>");// image                               
+                                        out.println("<div class=\"row p-1\"></div>");
+                                        break;
+                                    }
                                 }
                             }
+                            if (downloadSharedImages != null) {
+                                for (int i = 0; i < downloadSharedImages.length; i++) {
+                                    downloadSharedStatement.setString(1, downloadSharedImages[i]);
+                                    downloadSharedStatement.setString(2, login);
+                                    downloadSharedStatement.setString(3, login);
+                                    downloadSharedStatement.setString(4, login);
+                                    ResultSet rs = downloadSharedStatement.executeQuery();
+                                    while (rs.next()) {
+                                        BufferedImage image = ImageIO.read(rs.getBinaryStream(1));
+                                        BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                        Graphics2D graphics2D = resizedImage.createGraphics();
+                                        graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                        graphics2D.dispose();
+                                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                        ImageIO.write(resizedImage, "jpeg", bos);
+                                        out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
+                                        out.println("<div class=\"row p-1\"></div>");
+                                        break;
+                                    }
+                                }
+                            }
+                            out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
                             out.println("</body>");
+                            out.println("<script type=\"text/javascript\"> \n"
+                                    + "    $(document).ready(function () { \n"
+                                    + "        $(\"a\").click(); \n"
+                                    + "    }); \n"
+                                    + "</script> ");
                             out.println("</html>");
 
                         }
-//                        } else {
-//                            response.sendRedirect("dashboard");
-//                        }
+
                     }
                 }
             }
-            /* TODO output your page here. You may use following sample code. */
 
         }
     }

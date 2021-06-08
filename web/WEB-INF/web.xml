@@ -138,7 +138,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReceiveDownloadForm</servlet-name>
-        <url-pattern>/user/receive_download</url-pattern>
+        <url-pattern>/user/download</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReceiveEditKeyword</servlet-name>

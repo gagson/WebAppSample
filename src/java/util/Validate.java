@@ -142,7 +142,7 @@ public class Validate extends HttpServlet {
             //using this object to enforce foreign key
             SQLiteDataSource dataSource = new SQLiteDataSource(config);
             //connect to db
-            dataSource.setUrl("jdbc:sqlite:C:\\SQLite\\PhotoRepository.db3"); //db file
+            dataSource.setUrl("jdbc:sqlite:C:\\Users\\gagso\\Documents\\NetBeansProjects\\Photo-Repository\\web\\PhotoRepository.db3"); //db file
             application.setAttribute("dataSource", dataSource);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
