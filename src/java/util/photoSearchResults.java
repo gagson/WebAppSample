@@ -18,11 +18,13 @@ import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
 /**
@@ -103,41 +105,41 @@ public class photoSearchResults extends HttpServlet {
                             int j = 1;
                             for (int i = 0; i < keyword.length; i++) {
                                 if (keyword[i] != null && !"".equals(keyword[i])) {
-                                        selectMyPhotoStatement.setString(1, keyword[i]);
-                                        selectMyPhotoStatement.setString(2, keyword[i]);
-                                        selectMyPhotoStatement.setString(3, keyword[i]);
-                                        selectMyPhotoStatement.setString(4, login);
-                                        ResultSet rsMyPhoto = selectMyPhotoStatement.executeQuery();
+                                    selectMyPhotoStatement.setString(1, keyword[i]);
+                                    selectMyPhotoStatement.setString(2, keyword[i]);
+                                    selectMyPhotoStatement.setString(3, keyword[i]);
+                                    selectMyPhotoStatement.setString(4, login);
+                                    ResultSet rsMyPhoto = selectMyPhotoStatement.executeQuery();
 
-                                        while (rsMyPhoto.next()) {
-                                            String filename = rsMyPhoto.getString(2);
-                                            BufferedImage image = ImageIO.read(rsMyPhoto.getBinaryStream(1));
-                                            BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
-                                            Graphics2D graphics2D = resizedImage.createGraphics();
-                                            graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
-                                            graphics2D.dispose();
-                                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                                            ImageIO.write(resizedImage, "jpeg", bos);
-                                            out.println("<div class=\"row\">"
-                                                    + "<label class=\"col-md-1\"></label>");
-                                            out.println("<span>\n");
-                                            out.println(" <label class=\"form-check-label\">");
-                                            out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedMyPhoto\" class=\"form-check-input\" value=" + filename + ">" + j
-                                                    + ") </label>\n"
-                                                    + " </span>");
-                                            out.println("<label class=\"col-sm\"></label>");
-                                            out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
-                                            out.println("<p>(" + filename + ")</p>");
-                                            out.println("<label class=\"col-sm\"></label>");
-                                            out.println("</div>");//row
-                                            out.println("<div class=\"row p-1\"></div>");
-                                            j++;
-                                            break;
-                                        }
+                                    while (rsMyPhoto.next()) {
+                                        String filename = rsMyPhoto.getString(2);
+                                        BufferedImage image = ImageIO.read(rsMyPhoto.getBinaryStream(1));
+                                        BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                        Graphics2D graphics2D = resizedImage.createGraphics();
+                                        graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                        graphics2D.dispose();
+                                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                        ImageIO.write(resizedImage, "jpeg", bos);
+                                        out.println("<div class=\"row\">"
+                                                + "<label class=\"col-md-1\"></label>");
+                                        out.println("<span>\n");
+                                        out.println(" <label class=\"form-check-label\">");
+                                        out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedMyPhoto\" class=\"form-check-input\" value=" + filename + ">" + j
+                                                + ") </label>\n"
+                                                + " </span>");
+                                        out.println("<label class=\"col-sm\"></label>");
+                                        out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
+                                        out.println("<p>(" + filename + ")</p>");
+                                        out.println("<label class=\"col-sm\"></label>");
+                                        out.println("</div>");//row
+                                        out.println("<div class=\"row p-1\"></div>");
+                                        j++;
+                                        break;
                                     }
-
                                 }
-                            
+
+                            }
+
                             PreparedStatement selectOtherStatement = dbConn.prepareStatement(selectOtherPhotoString);
 
                             out.println("</div>");//Owned by others part
@@ -166,8 +168,6 @@ public class photoSearchResults extends HttpServlet {
                                     out.println("<label class=\"col-md-1\"></label>");
                                     out.println("<label class=\"col-md-1\">Owned by: <i>" + owned_by + "</i> ("
                                             + filename + ")</label>");
-
-//                                out.println("<img src=\"" + path + "/imageFolder/" + shared_from + "/" + filename + "\">");
                                     out.println("<div class=\"row p-1\"></div>");
                                     out.println("</div>");//row
                                     out.println("<div class=\"row p-1\"></div>");
@@ -201,12 +201,13 @@ public class photoSearchResults extends HttpServlet {
                     response.sendRedirect(request.getContextPath());
                 }
             } else { //public version
+
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String selectString = "SELECT image_data, file_name FROM photos WHERE (keyword1=? or keyword2=? or keyword3=?) AND (share_to_public='public')";
-                        try (PreparedStatement selectStatement = dbConn.prepareStatement(selectString)) {
+                        String selectPublicPhotoString = "SELECT image_data, file_name FROM photos WHERE (keyword1=? " + boolean1 + " keyword2=? " + boolean2 + " keyword3=?) and (share_to_public='public')";
 
+                        try (PreparedStatement selectPublicPhotoStatement = dbConn.prepareStatement(selectPublicPhotoString)) {
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
                             out.println("<head>");
@@ -228,57 +229,98 @@ public class photoSearchResults extends HttpServlet {
                                     + "  height: auto;\n"
                                     + "}</style>");
                             out.println("<body>");
-//                            out.println("<nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
-//                                    + "            <h2>Photo Repository App</h2>\n"
-//                                    + "        </nav>");
-//                            out.println("           <div class=\"h5 text-center\">\n"
-//                                    + "                Search Results Page\n"
-//                                    + "            </div>");
-//                            out.println("<center>You are in public page</center>");
-//                            out.println("<hr>");
-//                            out.println(" <form action=\"user/download\" method=\"post\" enctype=\"multipart/form-data\">");
-//                            out.println("<div class=\"row\">");
-//                            out.println("<label class=\"col-md-1\"></label>");
-//                            out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
+                            out.println("<nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
+                                    + "            <h2>Photo Repository App</h2>\n"
+                                    + "        </nav>");
+                            out.println("           <div class=\"h5 text-center\">\n"
+                                    + "                Search Results Page\n"
+                                    + "            </div>");
+                            out.println("<div><h4><center>You are in Public page.</b></center></h4></div>");
+                            out.println("<hr>");//how to separate it
+                            out.println(" <form action=\"public_download\" method=\"post\" enctype=\"multipart/form-data\">");
+                            out.println("<div class=\"row\">");
+                            out.println("<label class=\"col-md-1\"></label>");
+                            out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
+                            out.println("<p>Photos Available to Public:</p>");
+
+                            int j = 1;
                             for (int i = 0; i < public_keyword.length; i++) {
-                                selectStatement.setString(1, public_keyword[i]);
-                                selectStatement.setString(2, public_keyword[i]);
-                                selectStatement.setString(3, public_keyword[i]);
-                                ResultSet rs = selectStatement.executeQuery();
+                                if (public_keyword[i] != null && !"".equals(public_keyword[i])) {
+                                    selectPublicPhotoStatement.setString(1, public_keyword[i]);
+                                    selectPublicPhotoStatement.setString(2, public_keyword[i]);
+                                    selectPublicPhotoStatement.setString(3, public_keyword[i]);
+                                    ResultSet rs = selectPublicPhotoStatement.executeQuery();
 
-                                while (rs.next()) {
-                                    String filename = rs.getString(2);
-                                    BufferedImage image = ImageIO.read(rs.getBinaryStream(1));
-                                    BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
-                                    Graphics2D graphics2D = resizedImage.createGraphics();
-                                    graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
-                                    graphics2D.dispose();
-                                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                                    ImageIO.write(resizedImage, "jpeg", bos);
-//                                    out.println("<div class=\"row p-1\"></div>");
-//                                    out.println("<div class=\"row\"> <label class=\"col-md-1\"></label>");
-//                                    out.println("<span>\n");
-//                                    out.println(" <label class=\"form-check-label\">");
-//                                    out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedMyPhoto\" class=\"form-check-input\" value=" + filename + "></label>\n"
-//                                            + " </span>");
-//                                    out.println("<label class=\"col-sm\"></label>");
-                                    out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image 
-
+                                    while (rs.next()) {
+                                        String filename = rs.getString(2);
+                                        BufferedImage image = ImageIO.read(rs.getBinaryStream(1));
+                                        BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);
+                                        Graphics2D graphics2D = resizedImage.createGraphics();
+                                        graphics2D.drawImage(image, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+                                        graphics2D.dispose();
+                                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                        ImageIO.write(resizedImage, "jpeg", bos);
+                                        out.println("<div class=\"row\">"
+                                                + "<label class=\"col-md-1\"></label>");
+                                        out.println("<span>\n");
+                                        out.println(" <label class=\"form-check-label\">");
+                                        out.println(" <input type=\"checkbox\" id=\"checkedMyPhoto\" name=\"checkedPublicPhoto\" class=\"form-check-input\" value=" + filename + ">" + j
+                                                + ") </label>\n"
+                                                + " </span>");
+                                        out.println("<label class=\"col-sm\"></label>");
+                                        out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
+                                        out.println("<p>(" + filename + ")</p>");
+                                        out.println("<label class=\"col-sm\"></label>");
+                                        out.println("</div>");//row
+                                        out.println("<div class=\"row p-1\"></div>");
+                                        j++;
+                                        break;
+                                    }
                                 }
-                                break;
                             }
-//                            out.println("<label class=\"col-sm\"></label>"
-//                                    + "<input type=\"submit\" value=\"Download Selected Image\" name=\"action\" class=\"col-md-2 btn btn-primary btn-block\">\n");
-//                            out.println("</div>");//row
-//                            out.println("<div class=\"row p-1\"></div>");
-                            out.println("</form>");
+                            out.println("</div>");
+                            out.println("<label class=\"col-md-1\"></label>");
+                            out.println("</div>");//row
+                            out.println("<hr>");
+                            out.println("<div class=\"row\">\n"
+                                    + "<label class=\"col-md-5\"></label>\n"
+                                    + "<input type=\"submit\" value=\"Download Selected Image\" name=\"action\" class=\"col-md-2 btn btn-primary btn-block\">\n"
+                                    + "<label class=\"col-md-5\"></label>");
+                            out.println("</form>"
+                                    + " </div>");
+
+                            out.println("<div class=\"row p-1\"></div>");
+                            out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
+                            out.println("<button value=\"search\" name=\"search\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./search\">Go back to Photo Search</a></div>");
                             out.println("</body>");
                             out.println("</html>");
                         }
                     }
+                } else {
+                    response.sendRedirect(request.getContextPath());
                 }
             }
         }
+    }
+
+    public void init() throws ServletException {
+        super.init(); //To change body of generated methods, choose Tools | Templates.
+        ServletContext application = getServletContext();
+        try {
+            Class.forName("org.sqlite.JDBC");
+            //make sure class JDBC is available
+            SQLiteConfig config = new SQLiteConfig();
+            //config sqlite variables
+            config.setPragma(SQLiteConfig.Pragma.FOREIGN_KEYS, "on");
+            //using this object to enforce foreign key
+            SQLiteDataSource dataSource = new SQLiteDataSource(config);
+            //connect to db
+            dataSource.setUrl("jdbc:sqlite:C:\\Users\\gagso\\Documents\\NetBeansProjects\\Photo-Repository\\web\\PhotoRepository.db3"); //db file
+            application.setAttribute("dataSource", dataSource);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -293,7 +335,11 @@ public class photoSearchResults extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath());
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(photoSearchResults.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

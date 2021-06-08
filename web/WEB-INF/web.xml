@@ -91,6 +91,11 @@
         <servlet-class>user.ReceiveRemoveImage</servlet-class>
         <multipart-config/>
     </servlet>
+    <servlet>
+        <servlet-name>ReceivePublicDownload</servlet-name>
+        <servlet-class>util.ReceivePublicDownload</servlet-class>
+        <multipart-config/>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
@@ -167,6 +172,10 @@
     <servlet-mapping>
         <servlet-name>ReceiveRemoveImage</servlet-name>
         <url-pattern>/user/receive_removeImage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceivePublicDownload</servlet-name>
+        <url-pattern>/public_download</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
