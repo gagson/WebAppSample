@@ -114,11 +114,6 @@ public class ReceiveDownloadForm extends HttpServlet {
                             }
                             out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
                             out.println("</body>");
-                            out.println("<script type=\"text/javascript\"> \n"
-                                    + "    $(document).ready(function () { \n"
-                                    + "        $(\"a\").click(); \n"
-                                    + "    }); \n"
-                                    + "</script> ");
                             out.println("</html>");
 
                         }

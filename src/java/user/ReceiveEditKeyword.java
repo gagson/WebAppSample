@@ -56,12 +56,13 @@ public class ReceiveEditKeyword extends HttpServlet {
             SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
             if (dataSource != null) {
                 try (Connection dbConn = dataSource.getConnection()) {
-                    String updateString = "UPDATE photos SET keyword1=?, keyword2=?, keyword3=?  WHERE file_name=?";
+                    String updateString = "UPDATE photos SET keyword1=?, keyword2=?, keyword3=?  WHERE file_name=? AND user_login=?";
                     try (PreparedStatement updateStatement = dbConn.prepareStatement(updateString)) {
                         updateStatement.setString(1, keyword1);
                         updateStatement.setString(2, keyword2);
                         updateStatement.setString(3, keyword3);
                         updateStatement.setString(4, editPhoto);
+                        updateStatement.setString(5, login);
                         updateStatement.executeUpdate();
                     }
                 }

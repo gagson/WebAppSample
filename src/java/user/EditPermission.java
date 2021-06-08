@@ -194,6 +194,7 @@ public class EditPermission extends HttpServlet {
                                         + "                    <label class=\"col-md-3\"></label>\n"
                                         + "                </div>\n"
                                         + "            </form>");
+                                break;
                             }
                             out.println("<div class=\"row p-1\"></div>");
                             out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
