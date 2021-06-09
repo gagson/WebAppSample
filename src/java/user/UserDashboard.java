@@ -89,11 +89,11 @@ public class UserDashboard extends HttpServlet {
                             out.println("<nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
                                     + "            <h2>Photo Repository App</h2>\n"
                                     + "        </nav>");
-                            out.println("           <div class=\"h5 text-center\">\n"
+                            out.println("           <div class=\"h3 text-center\">\n"
                                     + "                Dashboard - Manage your photos\n"
                                     + "            </div>");
-                            out.println("<div><h4><center>You have logged in as <b>" + login
-                                    + "</b></center></h4></div>");
+                            out.println("<div><h5><center>You have logged in as <b>" + login
+                                    + "</b></center></h5></div>");
                             out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
                             out.println("<hr>");//how to separate it
                             out.println(" <form action=\"download\" method=\"post\" enctype=\"multipart/form-data\">");
@@ -179,6 +179,9 @@ public class UserDashboard extends HttpServlet {
                                     + "<p>(Only you owned images could be deleted)</p>");
                             out.println("</form>"
                                     + " </div>");
+                            out.println("<div class=\"row p-1\"></div>"
+                                    + "<div class=\"row\"><label class=\"col-md-8\"></label>"
+                                    + "<button value=\"Respond\" name=\"respond\" class=\"col-md-2 btn btn-success btn-block\"><a href=\"./respond\">See requests here</a></button></div>");
                             out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
                                     + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\">Search Photos by Keywords</a></button></div>");

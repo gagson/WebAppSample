@@ -82,12 +82,12 @@ public class readRequests extends HttpServlet {
                             out.println("<nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
                                     + "            <h2>Photo Repository App</h2>\n"
                                     + "        </nav>");
-                            out.println("           <div class=\"h5 text-center\">\n"
+                            out.println("           <div class=\"h3 text-center\">\n"
                                     + "                Requests Page\n"
                                     + "            </div>");
-                            out.println("<div><h4><center>You have logged in as <b>" + login
+                            out.println("<div><h5><center>You have logged in as <b>" + login
                                     //+ "(type:" + type + ")" 
-                                    + "</b></center></h4></div>");
+                                    + "</b></center></h5></div>");
                             out.println("<hr>");
                             out.println(" <form action=\"receive_response\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");
