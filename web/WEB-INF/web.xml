@@ -101,6 +101,11 @@
         <servlet-class>user.ReceiveRequest</servlet-class>
         <multipart-config/>
     </servlet>
+    <servlet>
+        <servlet-name>ReceiveRespond</servlet-name>
+        <servlet-class>user.ReceiveRespond</servlet-class>
+        <multipart-config/>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
@@ -185,6 +190,10 @@
     <servlet-mapping>
         <servlet-name>ReceiveRequest</servlet-name>
         <url-pattern>/receive_request</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveRespond</servlet-name>
+        <url-pattern>/user/receive_respond</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -89,7 +89,7 @@ public class readRequests extends HttpServlet {
                                     //+ "(type:" + type + ")" 
                                     + "</b></center></h5></div>");
                             out.println("<hr>");
-                            out.println(" <form action=\"receive_response\" method=\"post\" enctype=\"multipart/form-data\">");
+                            out.println(" <form action=\"receive_respond\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"response_form\" name=\"response_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
@@ -112,9 +112,9 @@ public class readRequests extends HttpServlet {
                                     
                                     out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image
                                     out.println("<label class=\"col-sm-1\"></label>");
-                                    out.println("<button type=\"submit\" value=\"" + filename + " name=\"response_grant\" class=\"btn btn-outline-success\">Grant</button>");
+                                    out.println("<button type=\"submit\" value=\"" + filename + " name=\"respond_grant\" class=\"btn btn-outline-success\">Grant</button>");
                                     out.println("<label class=\"col-sm-1\"></label>");
-                                    out.println("<button type=\"submit\" value=\"" + filename + " name=\"response_ignore\" class=\"btn btn-outline-danger\">Ignore</button>");
+                                    out.println("<button type=\"submit\" value=\"" + filename + " name=\"respond_ignore\" class=\"btn btn-outline-danger\">Ignore</button>");
                                     out.println("<label class=\"col-sm-1\"></label>");
                                     out.println("</div>");//row
                                     out.println("<div class=\"row p-1\"></div>");
