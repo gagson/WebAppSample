@@ -69,7 +69,7 @@ public class ReceiveEditKeyword extends HttpServlet {
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
                 out.println("<head>");
-                out.println("<title>File Storage</title>");
+                out.println("<title>Photo Repository App</title>");
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Success!!</h1>");

@@ -60,9 +60,9 @@ public class photoSearchResults extends HttpServlet {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String selectMyPhotoString = "SELECT image_data, file_name FROM photos WHERE (keyword1=? " + boolean1 + " keyword2=? " + boolean2 + " keyword3=?) and (user_login=?)";
+                        String selectMyPhotoString = "SELECT image_data, file_name FROM photos WHERE (keyword1=? " + boolean1 + " keyword2=? " + boolean2 + " keyword3=?) and (user_login=? or (share_to1=? or share_to2=? or share_to3=?))";
 
-                        String selectOtherPhotoString = "SELECT file_name, user_login FROM photos WHERE (keyword1=? " + boolean1 + " keyword2=? " + boolean2 + " keyword3=?)";
+                        String selectOtherPhotoString = "SELECT file_name, user_login FROM photos WHERE (keyword1=? " + boolean1 + " keyword2=? " + boolean2 + " keyword3=?) and (user_login!=?)";
                         try (PreparedStatement selectMyPhotoStatement = dbConn.prepareStatement(selectMyPhotoString)) {
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
@@ -95,12 +95,12 @@ public class photoSearchResults extends HttpServlet {
                                     //+ "(type:" + type + ")" 
                                     + "</b></center></h4></div>");
                             out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
-                            out.println("<hr>");//how to separate it
+                            out.println("<hr>");
                             out.println(" <form action=\"user/download\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
-                            out.println("<p>Photos Owned by You</p>");
+                            out.println("<p>Photos Owned by You or Shared to you:</p>");
 
                             int j = 1;
                             for (int i = 0; i < keyword.length; i++) {
@@ -109,6 +109,9 @@ public class photoSearchResults extends HttpServlet {
                                     selectMyPhotoStatement.setString(2, keyword[i]);
                                     selectMyPhotoStatement.setString(3, keyword[i]);
                                     selectMyPhotoStatement.setString(4, login);
+                                    selectMyPhotoStatement.setString(5, login);
+                                    selectMyPhotoStatement.setString(6, login);
+                                    selectMyPhotoStatement.setString(7, login);
                                     ResultSet rsMyPhoto = selectMyPhotoStatement.executeQuery();
 
                                     while (rsMyPhoto.next()) {
@@ -145,13 +148,14 @@ public class photoSearchResults extends HttpServlet {
                             out.println("</div>");//Owned by others part
                             out.println("<label class=\"col-md-1\"></label>");
                             out.println("<div id=\"download_form\" name=\"download_form\" class=\"col-md container p-3 my-3 border border-primary rounded\">");
-                            out.println("<p>Photos Shared with You</p>");
+                            out.println("<p>Photos Owned by Others</p>");
                             int k = 1;
                             for (int i = 0; i < keyword.length; i++) {
                                 if (keyword[i] != null && !"".equals(keyword[i])) {
                                     selectOtherStatement.setString(1, keyword[i]);
                                     selectOtherStatement.setString(2, keyword[i]);
                                     selectOtherStatement.setString(3, keyword[i]);
+                                    selectOtherStatement.setString(4, login);
                                 }
                                 ResultSet rsOtherPhoto = selectOtherStatement.executeQuery();
                                 while (rsOtherPhoto.next()) {
@@ -159,15 +163,11 @@ public class photoSearchResults extends HttpServlet {
                                     String filename = rsOtherPhoto.getString(1);
                                     out.println("<div class=\"row\">"
                                             + "<label class=\"col-md-1\"></label>");
-                                    out.println("<span>\n");
-                                    out.println(" <label class=\"form-check-label\">\n");
-                                    out.println(" <input type=\"checkbox\" id=\"check\" name=\"checkedShare\" class=\"form-check-input\" value=\"selection\">" + k
-                                            + ") </label>\n"
-                                            + " </span>");
-                                    out.println("<img src=\"\">");
-                                    out.println("<label class=\"col-md-1\"></label>");
-                                    out.println("<label class=\"col-md-1\">Owned by: <i>" + owned_by + "</i> ("
-                                            + filename + ")</label>");
+                                    out.println("<img src=\"x\">");
+                                    out.println("<label class=\"col-md-4\">(" + filename + ") Owned by: <i>" + owned_by + "</i></label>");
+                                    out.println("<label class=\"col-sm\"></label>");
+                                    out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='receive_request';\" name=\"request\" class=\"btn btn-outline-warning\">Request Access</button>");
+                                    out.println("<label class=\"col-sm\"></label>");
                                     out.println("<div class=\"row p-1\"></div>");
                                     out.println("</div>");//row
                                     out.println("<div class=\"row p-1\"></div>");
