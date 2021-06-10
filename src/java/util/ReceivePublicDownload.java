@@ -84,7 +84,7 @@ public class ReceivePublicDownload extends HttpServlet {
                                 }
                             }
                         }
-                        out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                        out.println("<a href=\"./search\">Go back to Photo Search</a>");
                         out.println("</body>");
                         out.println("</html>");
 

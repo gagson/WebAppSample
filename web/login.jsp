@@ -25,9 +25,12 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
             <h2>Photo Repository App</h2>
         </nav>
+        <div class="h3 text-center" style="background-color:PaleVioletRed; color:white;">
+            Login Page
+        </div>
         <div class="container-fluid">
             <div class="h8 text-center">
-                Final Assignment (2021/6) - Gagson Lee (20160)
+                WAD Final Project (2021/6) - Gagson Lee (20160)
             </div>
             <form action="validate" method="post">
                 <div class="row">
@@ -48,7 +51,7 @@
                 <div class="row p-1"></div>
                 <div class="row">
                     <label class="col-md-3"></label>
-                    <p>**You might not able to login with a disabled account, please contact the admin.</p>
+                    <p>**You might not able to login with a disabled account, please contact the admin if you have any trouble</p>
                     <label class="col-md-3"></label>
                 </div>
                 <div class="row p-1"></div>
@@ -63,7 +66,7 @@
             <div class="row p-1"></div>
                 <div class="row">
                     <label class="col-md-3"></label>
-                    <button value="search" name="search" class="col-md-6 btn btn-warning btn-block"><a href=search>Photo Search Page</a></div>
+                    <button value="search" name="search" class="col-md-6 btn btn-warning btn-block"><a href=search style="color: black">Photo Search Page (Public)</a></div>
                     <label class="col-md-3"></label>
 
                 </div>

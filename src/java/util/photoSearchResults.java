@@ -91,7 +91,6 @@ public class photoSearchResults extends HttpServlet {
                                     + "                Search Results Page\n"
                                     + "            </div>");
                             out.println("<div><h4><center>You have logged in as <b>" + login
-                                    //+ "(type:" + type + ")" 
                                     + "</b></center></h4></div>");
                             out.println("<hr>");
                             out.println(" <form action=\"user/download\" method=\"post\" enctype=\"multipart/form-data\">");

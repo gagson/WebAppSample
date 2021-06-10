@@ -98,14 +98,14 @@ public class EditPermission extends HttpServlet {
                                     + "            <h2>Photo Repository App</h2>\n"
                                     + "        </nav>\n"
                                     + "        <div class=\"container-fluid\">\n"
-                                    + "            <div class=\"h5 text-center\">\n"
+                                    + "            <div class=\"h3 text-center\" style=\"background-color:SlateBlue; color:white;\">\n"
                                     + "                Photo Permissions Management\n"
                                     + "            </div>\n"
-                                    + "            <div class=\"h3 text-center\">\n"
+                                    + "            <div class=\"h5 text-center\" style=\"background-color:Tomato; color:white;\">\n"
                                     + "                Please make sure to input the right username!!\n"
                                     + "            </div>\n");
-                            out.println("<div><h4><center>You have logged in as <b>" + login
-                                    + "</b></center></h4></div>");
+                            out.println("<div><h5><center>You have logged in as <b>" + login
+                                    + "</b></center></h5></div>");
 
                             BufferedImage image = ImageIO.read(rsMyPhoto.getBinaryStream(1));
                             BufferedImage resizedImage = new BufferedImage(image.getWidth() / 2, image.getHeight() / 2, BufferedImage.TYPE_INT_RGB);

@@ -72,7 +72,7 @@ public class ReceiveEditPermission extends HttpServlet {
                             PreparedStatement updateStatement3null = dbConn.prepareStatement(updateString3null);
                             while (rsAllUsers.next()) {//not null
                                 if ((share_to1 != null) && (!share_to1.equals(""))) {
-                                    if (rsAllUsers.getString(1).equals(share_to1) && rsAllUsers.getString(1) != null) {
+                                    if (rsAllUsers.getString(1).equals(share_to1) && (rsAllUsers.getString(1)) != null) {
                                         updateStatement1.setString(1, share_to1);
                                         updateStatement1.setString(2, editPhoto);
                                         updateStatement1.executeUpdate();
@@ -82,7 +82,7 @@ public class ReceiveEditPermission extends HttpServlet {
                                     updateStatement1null.executeUpdate();
                                 }
                                 if ((share_to2 != null) && (!share_to2.equals(""))) {
-                                    if (rsAllUsers.getString(1).equals(share_to2) && rsAllUsers.getString(1) != null) {
+                                    if (rsAllUsers.getString(1).equals(share_to2) && (rsAllUsers.getString(1)) != null) {
                                         updateStatement2.setString(1, share_to2);
                                         updateStatement2.setString(2, editPhoto);
                                         updateStatement2.executeUpdate();
@@ -91,8 +91,8 @@ public class ReceiveEditPermission extends HttpServlet {
                                     updateStatement2null.setString(1, editPhoto);
                                     updateStatement2null.executeUpdate();
                                 }
-                                if ((share_to3 != null)&&(!share_to1.equals(""))) {
-                                    if (rsAllUsers.getString(1).equals(share_to3) && rsAllUsers.getString(1) != null) {
+                                if ((share_to3 != null) && (!share_to3.equals(""))) {
+                                    if (rsAllUsers.getString(1).equals(share_to3) && (rsAllUsers.getString(1)) != null) {
                                         updateStatement3.setString(1, share_to3);
                                         updateStatement3.setString(2, editPhoto);
                                         updateStatement3.executeUpdate();

@@ -54,14 +54,14 @@ public class photoSearch extends HttpServlet {
                         + "    </head>\n"
                         + "    <body>\n"
                         + "        <nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
-                        + "            <h2>Photo Search Page</h2>\n"
+                        + "            <h2>Photo Repository App</h2>\n"
                         + "        </nav>\n"
                         + "        <div class=\"container-fluid\">\n"
-                        + "            <div class=\"h5 text-center\">\n"
-                        + "                Search photos with keywords\n"
+                        + "            <div class=\"h3 text-center\" style=\"background-color:RoyalBlue; color:white;\">\n"
+                        + "                Photo Search Page - Search photos with keywords\n"
                         + "            </div>\n");
-                out.println("<div><center><h6>You have logged in as <b>" + login
-                        + "</b></center></h6></div>"
+                out.println("<div><center><h5>You have logged in as <b>" + login
+                        + "</b></center></h5></div>"
                         + "            <form action=\"search_results\" method=\"post\" enctype=\"multipart/form-data\">\n"
                         + "                <div class=\"row p-1\"></div>\n"
                         + "                <div class=\"row\" id=\"newRow1\">\n"
@@ -121,7 +121,7 @@ public class photoSearch extends HttpServlet {
                 out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./logout\">Logout</a></div>"
                         + "    </body>\n"
                         + "</html>");
-            } else { //public
+            } else { //public version
                 out.println("<!DOCTYPE html>\n"
                         + "\n"
                         + "<html>\n"
@@ -140,14 +140,14 @@ public class photoSearch extends HttpServlet {
                         + "    </head>\n"
                         + "    <body>\n"
                         + "        <nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
-                        + "            <h2>Photo Search Page</h2>\n"
+                        + "            <h2>Photo Repository App</h2>\n"
                         + "        </nav>\n"
                         + "        <div class=\"container-fluid\">\n"
-                        + "            <div class=\"h5 text-center\">\n"
-                        + "                Search photos with keywords\n"
+                        + "            <div class=\"h3 text-center\" style=\"background-color:RoyalBlue; color:white;\">\n"
+                        + "                Photo Search Page - Search photos with keywords\n"
                         + "            </div>\n"
-                        + "<div><h4><center>You are in <b>Public</b> page</center>"
-                        + "Click <a href=\"./login.jsp\">Here</a> if you want to log in</h4></div>"
+                        + "<div><h5 style=\"background-color:Tomato; color:white;\"><center>You are in <b>Public</b> page</center></h5></div>"
+                        + "<div><h6><center>Click <a href=\"./login.jsp\">Here</a> if you want to log in</center></h6></div>"
                         + "            <form action=\"search_results\" method=\"post\" enctype=\"multipart/form-data\">\n"
                         + "                <div class=\"row p-1\"></div>\n"
                         + "                <div class=\"row\" id=\"newRow1\">\n"

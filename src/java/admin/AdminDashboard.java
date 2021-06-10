@@ -77,11 +77,11 @@ public class AdminDashboard extends HttpServlet {
                             + "            <h2>Photo Repository App</h2>\n"
                             + "        </nav>\n"
                             + "        <div class=\"container-fluid\">\n"
-                            + "            <div class=\"h5 text-center\">\n"
+                            + "            <div class=\"h3 text-center\" style=\"background-color:RoyalBlue; color:white;\">\n"
                             + "                Admin Dashboard: Manage Users Page\n"
                             + "            </div>");
-                    out.println("<div><center><h6>You have logged in as <b>" + login
-                            + "</b></center></h6></div>");
+                    out.println("<div><center><h5>You have logged in as <b>" + login
+                            + "</b></center></h5></div>");
                     out.println("        </div>\n"
                             + "            <form action=\"./receive\" method=\"post\" enctype=\"multipart/form-data\">\n"
                             + "                <div class=\"row p-1\"></div>\n");
@@ -155,10 +155,10 @@ public class AdminDashboard extends HttpServlet {
                             + "            </form>\n");
                     out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
-                                    + "<button value=\"User Dashboard\" name=\"userDashboard\" class=\"col-md-2 btn btn-dark btn-block\"><a href=\"../user/dashboard\">Your 'user' version of dashboard is here</a></button></div>");
+                                    + "<button value=\"User Dashboard\" name=\"userDashboard\" class=\"col-md-2 btn btn-dark btn-block\"><a href=\"../user/dashboard\" style=\"color: white\">Your 'user' version of dashboard is here</a></button></div>");
                     out.println("<div class=\"row p-1\"></div>"
                             + "<div class=\"row\"><label class=\"col-md-8\"></label>"
-                            + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\">Search Photos by Keywords</a></button></div>");
+                            + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\" style=\"color: black\">Search Photos by Keywords</a></button></div>");
                     out.println("<div class=\"row p-1\"></div>");
                     out.println("<div class=\"row\"><label class=\"col-md-8\"></label>");
                     out.println("<button value=\"Logout\" name=\"logout\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"../logout\">Logout</a></div>"

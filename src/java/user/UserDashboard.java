@@ -88,7 +88,7 @@ public class UserDashboard extends HttpServlet {
                             out.println("<nav class=\"navbar navbar-expand-lg navbar-light bg-light justify-content-center\">\n"
                                     + "            <h2>Photo Repository App</h2>\n"
                                     + "        </nav>");
-                            out.println("           <div class=\"h3 text-center\">\n"
+                            out.println("           <div class=\"h3 text-center\" style=\"background-color:DodgerBlue; color:white;\">\n"
                                     + "                Dashboard - Manage your photos\n"
                                     + "            </div>");
                             out.println("<div><h5><center>You have logged in as <b>" + login
