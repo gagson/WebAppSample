@@ -66,9 +66,8 @@ public class ReceiveFileServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type != null)) {
             Part filePart = request.getPart("file");
             String fileName = filePart.getSubmittedFileName();
             InputStream image = filePart.getInputStream();
@@ -77,11 +76,11 @@ public class ReceiveFileServlet extends HttpServlet {
             String kw3 = request.getParameter("kw3");
 //            ServletContext application = getServletContext();
 //            ArrayList<String> kwList = (ArrayList<String>) application.getAttribute("keyword");
-            File destinationFolder = new File(homeFolder);
-            if (!destinationFolder.exists()) {
-                destinationFolder.mkdirs();
-            }
-            filePart.write(destinationFolder.getAbsolutePath() + File.separator + fileName);
+//            File destinationFolder = new File(homeFolder);
+//            if (!destinationFolder.exists()) {
+//                destinationFolder.mkdirs();
+//            }
+//            filePart.write(destinationFolder.getAbsolutePath() + File.separator + fileName);
             SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
             if (dataSource != null) {
                 try (Connection dbConn = dataSource.getConnection()) {

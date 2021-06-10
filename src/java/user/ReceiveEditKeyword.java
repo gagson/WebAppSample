@@ -44,14 +44,13 @@ public class ReceiveEditKeyword extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         String keyword1 = request.getParameter("keyword1");
         String keyword2 = request.getParameter("keyword2");
         String keyword3 = request.getParameter("keyword3");
         String editPhoto = request.getParameter("edit");
         
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type != null)) {
            
             SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
             if (dataSource != null) {

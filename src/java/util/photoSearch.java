@@ -34,9 +34,8 @@ public class photoSearch extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) { //logged in version
+            if ((login != null) && (type != null)) { //logged in version
                 out.println("<!DOCTYPE html>\n"
                         + "\n"
                         + "<html>\n"

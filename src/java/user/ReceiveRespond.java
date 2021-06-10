@@ -41,11 +41,10 @@ public class ReceiveRespond extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         String grant = request.getParameter("respond_grant");
 
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type != null)) {
 
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {

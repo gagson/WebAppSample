@@ -41,28 +41,26 @@ public class ReceiveAdminAddUser extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
-
         String addUsername = request.getParameter("addUsername");
         String addPassword = request.getParameter("addPassword");
         String addRole = request.getParameter("addRole");
 
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type != null)) {
 
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
-                        String addUserString = "INSERT INTO credential (login, secret, type, home_folder)"
-                                + "VALUES (?, ?, ?, ?)";
+                        String addUserString = "INSERT INTO credential (login, secret, type)"
+                                + "VALUES (?, ?, ?)";
 
                         try (PreparedStatement addUserStatement = dbConn.prepareStatement(addUserString)) {
                             if (addUsername != null) {
                                 addUserStatement.setString(1, addUsername);
                                 addUserStatement.setString(2, addPassword);
                                 addUserStatement.setString(3, addRole);
-                                String addFolder = "Photo-Repository\\web\\imageFolder\\" + addUsername;
-                                addUserStatement.setString(4, addFolder);
+//                                String addFolder = "Photo-Repository\\web\\imageFolder\\" + addUsername;
+//                                addUserStatement.setString(4, addFolder);
                                 addUserStatement.executeUpdate();
                             }
                         }

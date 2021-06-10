@@ -49,14 +49,13 @@ public class photoSearchResults extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         String[] keyword = request.getParameterValues("keyword");
         String[] public_keyword = request.getParameterValues("kw");
         String boolean1 = request.getParameter("boolean1");
         String boolean2 = request.getParameter("boolean2");
 
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) { //logged in version
+            if ((login != null) && (type != null)) { //logged in version
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
@@ -94,7 +93,6 @@ public class photoSearchResults extends HttpServlet {
                             out.println("<div><h4><center>You have logged in as <b>" + login
                                     //+ "(type:" + type + ")" 
                                     + "</b></center></h4></div>");
-                            out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
                             out.println("<hr>");
                             out.println(" <form action=\"user/download\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");

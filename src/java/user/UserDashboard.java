@@ -46,9 +46,8 @@ public class UserDashboard extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type != null)) {
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
                     try (Connection dbConn = dataSource.getConnection()) {
@@ -94,7 +93,6 @@ public class UserDashboard extends HttpServlet {
                                     + "            </div>");
                             out.println("<div><h5><center>You have logged in as <b>" + login
                                     + "</b></center></h5></div>");
-                            out.println("<center>(Your homefolder is " + homeFolder + ")</center>");
                             out.println("<hr>");//how to separate it
                             out.println(" <form action=\"download\" method=\"post\" enctype=\"multipart/form-data\">");
                             out.println("<div class=\"row\">");
@@ -120,9 +118,6 @@ public class UserDashboard extends HttpServlet {
                                         + " </span>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image                               
-
-//                                out.println("<img src=\"" + path + "/imageFolder/" + login + "/" + filename + "\">");
-//                                out.println("<p>(" + filename + ")</p>");
                                 out.println("<label class=\"col-sm\"></label>");
                                 out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='edit';\" name=\"edit\" class=\"btn btn-outline-success\">Edit</button>");
                                 out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='permissions';\" name=\"share\" class=\"btn btn-outline-info\">Share</button>");
@@ -157,8 +152,6 @@ public class UserDashboard extends HttpServlet {
                                 out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\" width=\"100px\" height=\"auto\">");
                                 out.println("<label class=\"col-md-1\"></label>");
                                 out.println("<label class=\"col-md-4\">Shared from: <i>" + shared_from + "</i></label>");
-
-//                                out.println("<img src=\"" + path + "/imageFolder/" + shared_from + "/" + filename + "\">");
                                 out.println("<div class=\"row p-1\"></div>");
                                 out.println("</div>");//row
                                 out.println("<div class=\"row p-1\"></div>");

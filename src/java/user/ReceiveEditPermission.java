@@ -42,7 +42,6 @@ public class ReceiveEditPermission extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
         String share_to1 = request.getParameter("share_to1");
         String share_to2 = request.getParameter("share_to2");
         String share_to3 = request.getParameter("share_to3");
@@ -51,7 +50,7 @@ public class ReceiveEditPermission extends HttpServlet {
         String delete = request.getParameter("delete");
 
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type != null) && (homeFolder != null)) {
+            if ((login != null) && (type != null)) {
 
                 SQLiteDataSource dataSource = (SQLiteDataSource) getServletContext().getAttribute("dataSource");
                 if (dataSource != null) {
@@ -72,7 +71,7 @@ public class ReceiveEditPermission extends HttpServlet {
                             PreparedStatement updateStatement2null = dbConn.prepareStatement(updateString2null);
                             PreparedStatement updateStatement3null = dbConn.prepareStatement(updateString3null);
                             while (rsAllUsers.next()) {//not null
-                                if (share_to1 != null) {
+                                if ((share_to1 != null) && (!share_to1.equals(""))) {
                                     if (rsAllUsers.getString(1).equals(share_to1) && rsAllUsers.getString(1) != null) {
                                         updateStatement1.setString(1, share_to1);
                                         updateStatement1.setString(2, editPhoto);
@@ -82,23 +81,23 @@ public class ReceiveEditPermission extends HttpServlet {
                                     updateStatement1null.setString(1, editPhoto);
                                     updateStatement1null.executeUpdate();
                                 }
-                                if (share_to2 != null) {
+                                if ((share_to2 != null) && (!share_to2.equals(""))) {
                                     if (rsAllUsers.getString(1).equals(share_to2) && rsAllUsers.getString(1) != null) {
                                         updateStatement2.setString(1, share_to2);
                                         updateStatement2.setString(2, editPhoto);
                                         updateStatement2.executeUpdate();
                                     } 
-                                } else if (share_to2 == ""){
+                                } else {
                                     updateStatement2null.setString(1, editPhoto);
                                     updateStatement2null.executeUpdate();
                                 }
-                                if (share_to3 != null) {
+                                if ((share_to3 != null)&&(!share_to1.equals(""))) {
                                     if (rsAllUsers.getString(1).equals(share_to3) && rsAllUsers.getString(1) != null) {
                                         updateStatement3.setString(1, share_to3);
                                         updateStatement3.setString(2, editPhoto);
                                         updateStatement3.executeUpdate();
                                     } 
-                                } else if (share_to3 == ""){
+                                } else {
                                     updateStatement3null.setString(1, editPhoto);
                                     updateStatement3null.executeUpdate();
                                 }

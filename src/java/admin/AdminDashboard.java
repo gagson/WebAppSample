@@ -42,10 +42,9 @@ public class AdminDashboard extends HttpServlet {
         HttpSession session = request.getSession();
         String login = (String) session.getAttribute("login");
         String type = (String) session.getAttribute("type");
-        String homeFolder = (String) session.getAttribute("homeFolder");
 
         try (PrintWriter out = response.getWriter()) {
-            if ((login != null) && (type.equals("admin")) && (homeFolder != null)) {
+            if ((login != null) && (type.equals("admin"))) {
                 ServletContext application = getServletContext();
                 SQLiteDataSource dataSource = (SQLiteDataSource) application.getAttribute("dataSource");
                 try (Connection dbConn = dataSource.getConnection()) {
