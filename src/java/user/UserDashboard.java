@@ -181,10 +181,10 @@ public class UserDashboard extends HttpServlet {
                                     + " </div>");
                             out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
-                                    + "<button value=\"Respond\" name=\"respond\" class=\"col-md-2 btn btn-success btn-block\"><a href=\"./respond\">See requests here</a></button></div>");
+                                    + "<button value=\"Respond\" name=\"respond\" class=\"col-md-2 btn btn-success btn-block\"><a href=\"./respond\" style=\"color: black\">See requests here</a></button></div>");
                             out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
-                                    + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\">Search Photos by Keywords</a></button></div>");
+                                    + "<button value=\"Search Photos by Keywords\" name=\"search\" class=\"col-md-2 btn btn-warning btn-block\"><a href=\"../search\" style=\"color: black\">Search Photos by Keywords</a></button></div>");
                             out.println("<div class=\"row p-1\"></div>"
                                     + "<div class=\"row\"><label class=\"col-md-8\"></label>"
                                     + "<button value=\"Upload New Image\" name=\"upload\" class=\"col-md-2 btn btn-light btn-block\"><a href=\"./upload\">Upload New Image</a></button></div>");

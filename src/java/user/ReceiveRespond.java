@@ -43,7 +43,6 @@ public class ReceiveRespond extends HttpServlet {
         String type = (String) session.getAttribute("type");
         String homeFolder = (String) session.getAttribute("homeFolder");
         String grant = request.getParameter("respond_grant");
-        String ignore = request.getParameter("respond_ignore");
 
         try (PrintWriter out = response.getWriter()) {
             if ((login != null) && (type != null) && (homeFolder != null)) {
@@ -54,60 +53,91 @@ public class ReceiveRespond extends HttpServlet {
                         String grantString1 = "UPDATE photos SET request=null, share_to1=? WHERE file_name=?";
                         String grantString2 = "UPDATE photos SET request=null, share_to2=? WHERE file_name=?";
                         String grantString3 = "UPDATE photos SET request=null, share_to3=? WHERE file_name=?";
-                        String ignoreString = "DELETE request FROM photos WHERE file_name=?";
                         String shareString1 = "SELECT share_to1 FROM photos WHERE file_name=?";
                         String shareString2 = "SELECT share_to2 FROM photos WHERE file_name=?";
                         String shareString3 = "SELECT share_to3 FROM photos WHERE file_name=?";
+                        String requestString = "SELECT request FROM photos WHERE file_name=?";
 
                         try (PreparedStatement grantStatement1 = dbConn.prepareStatement(grantString1)) {
                             PreparedStatement grantStatement2 = dbConn.prepareStatement(grantString2);
                             PreparedStatement grantStatement3 = dbConn.prepareStatement(grantString3);
-                            PreparedStatement ignoreStatement = dbConn.prepareStatement(ignoreString);
                             PreparedStatement shareStatement1 = dbConn.prepareStatement(shareString1);
                             PreparedStatement shareStatement2 = dbConn.prepareStatement(shareString2);
                             PreparedStatement shareStatement3 = dbConn.prepareStatement(shareString3);
+                            PreparedStatement requestStatement = dbConn.prepareStatement(requestString);
 
-                            if (ignore != null) {
-                                ignoreStatement.setString(1, ignore);
-                                ignoreStatement.executeUpdate();
-                                out.println("<!DOCTYPE html>");
-                                out.println("<html>");
-                                out.println("<head>");
-                                out.println("<title>Photo Repository App</title>");
-                                out.println("</head>");
-                                out.println("<body>");
-                                out.println("<h1>Ignore Success!!</h1>");
-                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-                                out.println("</body>");
-                                out.println("</html>");
-                            } else {
-                                shareStatement1.setString(1, grant);
-                                ResultSet rs1 = shareStatement1.executeQuery();
-                                shareStatement2.setString(1, grant);
-                                ResultSet rs2 = shareStatement2.executeQuery();
-                                shareStatement3.setString(1, grant);
-                                ResultSet rs3 = shareStatement3.executeQuery();
+//                           
+                            shareStatement1.setString(1, grant);
+                            ResultSet rs1 = shareStatement1.executeQuery();
+                            shareStatement2.setString(1, grant);
+                            ResultSet rs2 = shareStatement2.executeQuery();
+                            shareStatement3.setString(1, grant);
+                            ResultSet rs3 = shareStatement3.executeQuery();
+                            requestStatement.setString(1, grant);
+                            ResultSet rs_request = requestStatement.executeQuery();
 
-                                if (rs1.getString(1) == null) {
-                                    grantStatement1.setString(1, grant);
-                                    grantStatement1.executeUpdate();
-                                } else if (rs2.getString(1) == null) {
-                                    grantStatement2.setString(1, grant);
-                                    grantStatement2.executeUpdate();
-                                } else if (rs3.getString(1) == null) {
-                                    grantStatement3.setString(1, grant);
-                                    grantStatement3.executeUpdate();
+                            while (rs1.next()) {
+                                while (rs2.next()) {
+                                    while (rs3.next()) {
+                                        while (rs_request.next()) {
+                                            String request_from = rs_request.getString(1);
+                                            if (rs1.getString(1) == null) {
+                                                grantStatement1.setString(1, request_from);
+                                                grantStatement1.setString(2, grant);
+                                                grantStatement1.executeUpdate();
+                                                out.println("<!DOCTYPE html>");
+                                                out.println("<html>");
+                                                out.println("<head>");
+                                                out.println("<title>Photo Repository App</title>");
+                                                out.println("</head>");
+                                                out.println("<body>");
+                                                out.println("<h1>Grant Access Success!!</h1>");
+                                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                                out.println("</body>");
+                                                out.println("</html>");
+                                            } else if (rs2.getString(1) == null) {
+                                                grantStatement2.setString(1, request_from);
+                                                grantStatement2.setString(2, grant);
+                                                grantStatement2.executeUpdate();
+                                                out.println("<!DOCTYPE html>");
+                                                out.println("<html>");
+                                                out.println("<head>");
+                                                out.println("<title>Photo Repository App</title>");
+                                                out.println("</head>");
+                                                out.println("<body>");
+                                                out.println("<h1>Grant Access Success!!</h1>");
+                                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                                out.println("</body>");
+                                                out.println("</html>");
+                                            } else if (rs3.getString(1) == null) {
+                                                grantStatement3.setString(1, request_from);
+                                                grantStatement3.setString(2, grant);
+                                                grantStatement3.executeUpdate();
+                                                out.println("<!DOCTYPE html>");
+                                                out.println("<html>");
+                                                out.println("<head>");
+                                                out.println("<title>Photo Repository App</title>");
+                                                out.println("</head>");
+                                                out.println("<body>");
+                                                out.println("<h1>Grant Access Success!!</h1>");
+                                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                                out.println("</body>");
+                                                out.println("</html>");
+                                            } else {
+                                                out.println("<!DOCTYPE html>");
+                                                out.println("<html>");
+                                                out.println("<head>");
+                                                out.println("<title>Photo Repository App</title>");
+                                                out.println("</head>");
+                                                out.println("<body>");
+                                                out.println("<h1>There is no available sharing spaces, please remove the original permisson or contact the admin.</h1>");
+                                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
+                                                out.println("</body>");
+                                                out.println("</html>");
+                                            }
+                                        }
+                                    }
                                 }
-                                out.println("<!DOCTYPE html>");
-                                out.println("<html>");
-                                out.println("<head>");
-                                out.println("<title>Photo Repository App</title>");
-                                out.println("</head>");
-                                out.println("<body>");
-                                out.println("<h1>Grant Access Success!!</h1>");
-                                out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
-                                out.println("</body>");
-                                out.println("</html>");
                             }
 
                         }

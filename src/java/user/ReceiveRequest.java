@@ -85,7 +85,7 @@ public class ReceiveRequest extends HttpServlet {
                                     out.println("<title>Photo Repository App</title>");
                                     out.println("</head>");
                                     out.println("<body>");
-                                    out.println("<h1>Success!!</h1>");
+                                    out.println("<h1>Success!! Please wait for the owner to grant your access.</h1>");
                                     out.println("<a href=\"./user/dashboard\">Go back to Dashboard</a>");
                                     out.println("</body>");
                                     out.println("</html>");

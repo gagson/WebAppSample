@@ -112,9 +112,9 @@ public class readRequests extends HttpServlet {
                                     
                                     out.println("<img src=\"data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray()) + "\">");// image
                                     out.println("<label class=\"col-sm-1\"></label>");
-                                    out.println("<button type=\"submit\" value=\"" + filename + " name=\"respond_grant\" class=\"btn btn-outline-success\">Grant</button>");
+                                    out.println("<button type=\"submit\" value=\"" + filename + "\" name=\"respond_grant\" class=\"btn btn-outline-success\">Grant</button>");
                                     out.println("<label class=\"col-sm-1\"></label>");
-                                    out.println("<button type=\"submit\" value=\"" + filename + " name=\"respond_ignore\" class=\"btn btn-outline-danger\">Ignore</button>");
+                                    out.println("<button type=\"submit\" value=\"" + filename + "\" name=\"respond_ignore\" onclick=\"form.action='receive_ignore';\" class=\"btn btn-outline-danger\">Ignore</button>");
                                     out.println("<label class=\"col-sm-1\"></label>");
                                     out.println("</div>");//row
                                     out.println("<div class=\"row p-1\"></div>");
