@@ -134,8 +134,9 @@ public class photoSearchResults extends HttpServlet {
                                         out.println("</div>");//row
                                         out.println("<div class=\"row p-1\"></div>");
                                         j++;
-                                        break;
+                                       
                                     }
+                                    break;
                                 }
 
                             }
@@ -153,23 +154,25 @@ public class photoSearchResults extends HttpServlet {
                                     selectOtherStatement.setString(2, keyword[i]);
                                     selectOtherStatement.setString(3, keyword[i]);
                                     selectOtherStatement.setString(4, login);
-                                }
-                                ResultSet rsOtherPhoto = selectOtherStatement.executeQuery();
-                                while (rsOtherPhoto.next()) {
-                                    String owned_by = rsOtherPhoto.getString(2);
-                                    String filename = rsOtherPhoto.getString(1);
-                                    out.println("<div class=\"row\">"
-                                            + "<label class=\"col-md-1\"></label>");
-                                    out.println("<img src=\"x\">");
-                                    out.println("<label class=\"col-md-4\">(" + filename + ") Owned by: <i>" + owned_by + "</i></label>");
-                                    out.println("<label class=\"col-sm\"></label>");
-                                    out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='receive_request';\" name=\"request\" class=\"btn btn-outline-warning\">Request Access</button>");
-                                    out.println("<label class=\"col-sm\"></label>");
-                                    out.println("<div class=\"row p-1\"></div>");
-                                    out.println("</div>");//row
-                                    out.println("<div class=\"row p-1\"></div>");
-                                    k++;
-                                    break;
+
+                                    ResultSet rsOtherPhoto = selectOtherStatement.executeQuery();
+                                    while (rsOtherPhoto.next()) {
+                                        String owned_by = rsOtherPhoto.getString(2);
+                                        String filename = rsOtherPhoto.getString(1);
+                                        out.println("<div class=\"row\">"
+                                                + "<label class=\"col-md-1\"></label>");
+                                        out.println("<img src=\"x\">");
+                                        out.println("<label class=\"col-md-4\">(" + filename + ") Owned by: <i>" + owned_by + "</i></label>");
+                                        out.println("<label class=\"col-sm\"></label>");
+                                        out.println("<button type=\"submit\" value=\"" + filename + "\" onclick=\"form.action='receive_request';\" name=\"request\" class=\"btn btn-outline-warning\">Request Access</button>");
+                                        out.println("<label class=\"col-sm\"></label>");
+                                        out.println("<div class=\"row p-1\"></div>");
+                                        out.println("</div>");//row
+                                        out.println("<div class=\"row p-1\"></div>");
+                                        k++;
+                                        break;
+                                    }
+
                                 }
 
                             }

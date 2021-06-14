@@ -52,7 +52,7 @@ public class ReceiveRemoveUser extends HttpServlet {
                         String deleteAccount = "DELETE FROM credential WHERE login=?";
 
                         try (PreparedStatement deleteStatement = dbConn.prepareStatement(deleteAccount)) {
-                            if (!deleteUser.equals(login)) {
+                            if (!deleteUser.equals(login) && !deleteUser.equals("public")) {
                                 deleteStatement.setString(1, deleteUser);
                                 deleteStatement.executeUpdate();
                                 out.println("<!DOCTYPE html>");
@@ -72,7 +72,7 @@ public class ReceiveRemoveUser extends HttpServlet {
                                 out.println("<title>Photo Repository App</title>");
                                 out.println("</head>");
                                 out.println("<body>");
-                                out.println("<h1>You cannot delete yourself!!</h1>");
+                                out.println("<h1>You cannot delete yourself or Public account!!</h1>");
                                 out.println("<a href=\"dashboard\">Go back to Dashboard</a>");
                                 out.println("</body>");
                                 out.println("</html>");
